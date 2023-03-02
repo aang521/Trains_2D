@@ -10,6 +10,9 @@ public class TrainSettings : ScriptableObject
 
 	public float maxAccelerationForce = 2000;
 
+	//anchor offset from center of wagon
+	public float trainAnchorOffset = 9;
+
 	public List<Color> playerColors = new List<Color>(4);
 	public Color noPlayerColor;
 

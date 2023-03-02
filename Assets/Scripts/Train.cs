@@ -61,15 +61,66 @@ public class Train : MonoBehaviour
 
 	public void UpdatePositions()
 	{
-		//if(speed > 0)
+		int mainWagonIndex = wagons.FindIndex(x => x.isLocomotive);
+		if(mainWagonIndex == -1)
 		{
-			Vector2 vel = speed * wagons[0].GetHeading();
-			wagons[0].transform.position += new Vector3(vel.x, vel.y, 0);
+			if (speed >= 0)
+				mainWagonIndex = 0;
+			else
+				mainWagonIndex = wagons.Count - 1;
 		}
-		//else
+		Wagon mainWagon = wagons[mainWagonIndex];
+
+		float distToTravel = speed * Time.deltaTime;
+
+		var currentSegment = TrackManager.instance.segments[mainWagon.currentSegment];
+		mainWagon.distanceAlongSegment += distToTravel;
+		while(mainWagon.distanceAlongSegment < 0)
+		{
+			mainWagon.currentSegment -= 1;//TODO this should be something else
+			currentSegment = TrackManager.instance.segments[mainWagon.currentSegment];
+			mainWagon.distanceAlongSegment += currentSegment.length;
+		}
+
+		float remaining = mainWagon.distanceAlongSegment;
+		int currentPointIndex = 0;
+		while (remaining > 0)
+		{
+			remaining -= currentSegment.points[currentPointIndex].nextDist;
+			currentPointIndex++;
+
+			if (currentPointIndex >= currentSegment.points.Length)
+			{
+				mainWagon.currentSegment += 1;//TODO this should be something else
+				currentSegment = TrackManager.instance.segments[mainWagon.currentSegment];
+				currentPointIndex = 0;
+				mainWagon.distanceAlongSegment = remaining; 
+			}
+		}
+		mainWagon.transform.position = currentSegment.points[currentPointIndex].position;
+		mainWagon.SetHeading(currentSegment.points[currentPointIndex].tangent);
+
+		//for (int i = mainWagonIndex - 1; i >= 0; i--)
 		//{
-		//	Vector2 vel = speed * wagons[wagons.Count-1].GetHeading();
-		//	wagons[wagons.Count - 1].transform.position += new Vector3(vel.x, vel.y, 0);
+		//	Wagon wagon = wagons[i];
+		//	var currentSegment = TrackManager.instance.segments[wagon.currentSegment];
+		//	wagon.distanceAlongSegment += distToTravel;
+		//	if(wagon.travelDirectionAlongSegment > 0)
+		//	{
+		//		float remaining = wagon.distanceAlongSegment;
+		//		int currentPointIndex = 0;
+		//		while(remaining > 0) {
+		//			remaining -= currentSegment.points[currentPointIndex].nextDist;
+		//			currentPointIndex++;
+		//		}
+		//		transform.position = currentSegment.points[currentPointIndex].position;
+		//	}
+		//	//wagon.transform.position = 
+		//}
+
+		//for (int i = mainWagonIndex + 1; i < wagons.Count; i++)
+		//{
+
 		//}
 	}
 

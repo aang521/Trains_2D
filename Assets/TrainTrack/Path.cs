@@ -175,7 +175,7 @@ public class Path
             float t = 0;
             while (t <= 1)
             {
-                t += 1f/divisions;
+                t += 1f / divisions;
                 Vector2 pointOnCurve = Bezier.EveluateQubic(p[0], p[1], p[2], p[3], t);
                 distTraveledSinceEvenPoint += Vector2.Distance(previousPoint, pointOnCurve);
 
@@ -193,6 +193,51 @@ public class Path
         }
 
         return evenlySpacedPoints.ToArray();
+    }
+
+    public struct PointData
+	{
+        public Vector2[] points;
+        public float[] t;
+    }
+    public PointData CalculateEvenlySpacedSegmentPoints(int index, float spacing, float resolution = 1) {
+        List<Vector2> evenlySpacedPoints = new List<Vector2>();
+        List<float> ts = new List<float>();
+        
+        Vector2[] p = GetPointsInSegment(index);
+        evenlySpacedPoints.Add(p[0]);
+        ts.Add(0);
+        Vector2 previousPoint = p[0];
+        float distTraveledSinceEvenPoint = 0;
+
+        float controlNetLength = (Vector2.Distance(p[0], p[1]) + Vector2.Distance(p[1], p[2]) + Vector2.Distance(p[2], p[3]));
+        float estimatedBezierLenght = Vector2.Distance(p[0], p[3]) + controlNetLength / 2;
+        int divisions = Mathf.CeilToInt(estimatedBezierLenght * resolution * 10);
+        float t = 0;
+        while (t <= 1)
+        {
+            t += 1f / divisions;
+            Vector2 pointOnCurve = Bezier.EveluateQubic(p[0], p[1], p[2], p[3], t);
+            distTraveledSinceEvenPoint += Vector2.Distance(previousPoint, pointOnCurve);
+
+            while (distTraveledSinceEvenPoint >= spacing)
+            {
+                float overshotDist = distTraveledSinceEvenPoint - spacing;
+                Vector2 newEvenlySpacedPont = pointOnCurve + (previousPoint - pointOnCurve).normalized * overshotDist;
+                evenlySpacedPoints.Add(newEvenlySpacedPont);
+                ts.Add(t);
+                distTraveledSinceEvenPoint = overshotDist;
+                previousPoint = newEvenlySpacedPont;
+            }
+
+            previousPoint = pointOnCurve;
+        }
+
+        return new PointData
+        {
+            points = evenlySpacedPoints.ToArray(),
+            t = ts.ToArray(),
+        };
     }
 
     private void AutoSetAnchorControlPoints(int anchorIndex)

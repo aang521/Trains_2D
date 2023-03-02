@@ -16,40 +16,26 @@ public class Wagon : MonoBehaviour
 	//the cargo in this wagon
     public Cargo cargo;
 
-	public bool isLocomotive;
+	public int currentSegment;
+	public float distanceAlongSegment;
 
-	private Vector2 prevVelocity;
-	//stored per frame
-	private Vector2 accumulatedAcceleration;
+	public bool isLocomotive;
 
 	public void Awake()
 	{
 		spriteRenderer.sprite = isLocomotive ? trainSettings.locomotiveSprite : trainSettings.wagonSprite;
 	}
 
-	private void FixedUpdate()
+	public void SetHeading(Vector2 heading)
 	{
-		Vector2 heading = GetHeading();
-		Vector2 velocity = heading * train.speed;
-
-		Vector2 acceleration = velocity - prevVelocity;
-		prevVelocity = velocity;
-		accumulatedAcceleration = acceleration;
-
 #pragma warning disable CS0618 // Type or member is obsolete
 		transform.rotation = Quaternion.AxisAngle(new Vector3(0, 0, 1), Mathf.Atan2(heading.y, heading.x));
 #pragma warning restore CS0618 // Type or member is obsolete
 	}
 
-	public Vector2 GetHeading()
+	public void AddImpulseForce(Vector2 acceleration)
 	{
-		//TODO get heading based on where on the track
-		return new Vector2(1, 0);
-	}
-
-	public void AddImpulseAcceleration(Vector2 acceleration)
-	{
-		accumulatedAcceleration += acceleration;
+		
 	}
 
 	public void SetTrain(Train train)
