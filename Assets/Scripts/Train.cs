@@ -15,7 +15,7 @@ public class Train : MonoBehaviour
 	// Who owns the train (0 and higher is player, -1 is no controller)
 	public int controller;
 
-	public void Start()
+	public void Awake()
 	{
 		foreach(Wagon wagon in wagons)
 		{
@@ -44,16 +44,16 @@ public class Train : MonoBehaviour
 		else
 			speed -= airDecceleration;
 
-		float deccelration = ((trainSettings.perWagonResistance * wagons.Count) / totalMass) * Time.fixedDeltaTime;
+		float decceleration = ((trainSettings.perWagonResistance * wagons.Count) / totalMass) * Time.fixedDeltaTime;
 		if (speed > 0)
 		{
-			speed -= deccelration;
+			speed -= decceleration;
 			if (speed < 0)
 				speed = 0;
 		}
 		else
 		{
-			speed += deccelration;
+			speed += decceleration;
 			if (speed > 0)
 				speed = 0;
 		}
@@ -106,11 +106,12 @@ public class Train : MonoBehaviour
 		{
 			Vector2 prevAnchorPos = (Vector2)otherWagon.transform.position + (Vector2)otherWagon.transform.right * trainSettings.trainAnchorOffset * (behind ? -1 : 1);
 
-			var currentSegment = TrackManager.instance.segments[wagon.currentSegment];
-
 			//TODO this needs to pick the previous track section
-			if (wagon.currentSegment > 0)
-				wagon.currentSegment -= 1;
+			wagon.currentSegment -= 1;
+			if (wagon.currentSegment < 0)
+				wagon.currentSegment = 0;
+
+			var currentSegment = TrackManager.instance.segments[wagon.currentSegment];
 
 			int currentPointIndex = 0;
 			Vector2 currentAnchorPos = currentSegment.points[currentPointIndex].position + currentSegment.points[currentPointIndex].tangent * trainSettings.trainAnchorOffset * (behind ? 1 : -1);
@@ -133,7 +134,7 @@ public class Train : MonoBehaviour
 
 				currentAnchorPos = currentSegment.points[currentPointIndex].position + currentSegment.points[currentPointIndex].tangent * trainSettings.trainAnchorOffset * (behind ? 1 : -1);
 				sqrDist = (prevAnchorPos - currentAnchorPos).sqrMagnitude;
-				if (sqrDist < bestDist)
+				if (sqrDist <= bestDist)
 				{
 					bestDist = sqrDist;
 					bestSegment = wagon.currentSegment;
@@ -143,7 +144,7 @@ public class Train : MonoBehaviour
 			}
 
 			wagon.currentSegment = bestSegment;
-
+			currentSegment = TrackManager.instance.segments[wagon.currentSegment];
 			wagon.transform.position = currentSegment.points[bestPoint].position;
 			wagon.SetHeading(currentSegment.points[bestPoint].tangent);
 		}
