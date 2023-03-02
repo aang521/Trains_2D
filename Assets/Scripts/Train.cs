@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Train : MonoBehaviour
+public class Train
 {
-	public TrainSettings trainSettings;
+	public TrainSettings trainSettings { get { return TrainSystem.instance.trainSettings; } }
 
 	//wagons in order from front to back
 	public List<Wagon> wagons = new List<Wagon>();
@@ -162,6 +162,36 @@ public class Train : MonoBehaviour
 		}
 	}
 
+	public void ResolveCollisions()
+	{
+		//foreach(Wagon wagon in wagons)
+		for(int i = 0; i < wagons.Count; i++)
+		{
+			Wagon wagon = wagons[i];
+			List<Collider2D> results = new List<Collider2D>();
+			ContactFilter2D a = new ContactFilter2D();
+			a.NoFilter();
+			wagon.collider.OverlapCollider(a, results);
+			foreach(Collider2D collider in results) 
+			{
+				Wagon otherWagon = collider.GetComponent<Wagon>();
+				//TODO check if collision is at one of the ends of the wagon and is on the same track
+				if(otherWagon.train.controller == -1)
+				{
+					if(i == 0)
+					{
+						AddWagonFront(otherWagon);
+					}
+					else if(i == wagons.Count - 1)
+					{
+						AddWagonBack(otherWagon);
+					}
+				}
+				Debug.Log(otherWagon, otherWagon);
+			}
+		}
+	}
+
 	public void UpdateTotalMass()
 	{
 		totalMass = 0;
@@ -177,6 +207,7 @@ public class Train : MonoBehaviour
 
 	public void AddWagonBack(Wagon wagon)
 	{
+		wagon.train?.RemoveWagon(wagon);
 		wagons.Add(wagon);
 		wagon.SetTrain(this);
 		UpdateTotalMass();
@@ -184,6 +215,7 @@ public class Train : MonoBehaviour
 
 	public void AddWagonFront(Wagon wagon)
 	{
+		wagon.train?.RemoveWagon(wagon);
 		wagons.Insert(0, wagon);
 		wagon.SetTrain(this);
 		UpdateTotalMass();
@@ -192,7 +224,9 @@ public class Train : MonoBehaviour
 	public void RemoveWagon(Wagon wagon)
 	{
 		wagons.Remove(wagon);
-		wagon.SetTrain(this);
+		wagon.SetTrain(null);
 		UpdateTotalMass();
+		if (wagons.Count == 0)
+			TrainSystem.instance.trains.Remove(this);
 	}
 }

@@ -10,9 +10,10 @@ public class Wagon : MonoBehaviour
 	public float mass = 1;
 
 	public SpriteRenderer spriteRenderer;
+	public new Collider2D collider;
 
 	//train that this wagon is part of
-    private Train train;
+    public Train train;
 
 	public Cargo cargoPrefab;
 	//the cargo in this wagon

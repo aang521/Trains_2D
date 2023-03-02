@@ -99,6 +99,7 @@ MonoBehaviour:
   trainSettings: {fileID: 11400000, guid: 34ca6d24b08f4c041a8228385a18577d, type: 2}
   mass: 0.5
   spriteRenderer: {fileID: 7962527402141740777}
+  collider: {fileID: 610818600407318376}
   cargoPrefab: {fileID: 7143878679769165895, guid: 8d23bdf8b33aefa438785c391a6b7c52, type: 3}
   cargo: {fileID: 0}
   cargoPosition: {x: 0, y: 0}

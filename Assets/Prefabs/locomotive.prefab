@@ -65,37 +65,3 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 904ff6a895f0a994dbe4cea03cb6045c, type: 3}
---- !u!1 &8301212171914539309 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7962527402141740779, guid: 904ff6a895f0a994dbe4cea03cb6045c, type: 3}
-  m_PrefabInstance: {fileID: 2140124622025498566}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1339457403816348499 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1091548312887628949, guid: 904ff6a895f0a994dbe4cea03cb6045c, type: 3}
-  m_PrefabInstance: {fileID: 2140124622025498566}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8301212171914539309}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e9694fcf2449ab54bb2dd2df1fe96b58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &4790889037961522230
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8301212171914539309}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceafa7d641eb57f4ab9ee6d02e7b08f9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  trainSettings: {fileID: 11400000, guid: 34ca6d24b08f4c041a8228385a18577d, type: 2}
-  wagons:
-  - {fileID: 1339457403816348499}
-  speed: 0
-  totalMass: 0
-  controller: 0
