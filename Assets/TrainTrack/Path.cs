@@ -8,6 +8,7 @@ public class Path
     [SerializeField, HideInInspector]
     List<Vector2> points;
 
+    [SerializeField, HideInInspector]
     private bool isClosedPath;
 
     public Path(Vector2 centre)
@@ -203,7 +204,7 @@ public class Path
     public PointData CalculateEvenlySpacedSegmentPoints(int index, float spacing, float resolution = 1) {
         List<Vector2> evenlySpacedPoints = new List<Vector2>();
         List<float> ts = new List<float>();
-        
+
         Vector2[] p = GetPointsInSegment(index);
         evenlySpacedPoints.Add(p[0]);
         ts.Add(0);

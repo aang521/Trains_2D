@@ -16,4 +16,17 @@ public class TrackSegment : MonoBehaviour
 
 	public TrackPoint[] points;
 	public float length;
+
+	public List<TrackSegment> Next = new List<TrackSegment>();
+	public List<TrackSegment> Prev = new List<TrackSegment>();
+
+	public void ConnectNext(TrackSegment next)
+	{
+		Next.Add(next);
+	}
+
+	public void ConnectPrev(TrackSegment prev)
+	{
+		Prev.Add(prev);
+	}
 }

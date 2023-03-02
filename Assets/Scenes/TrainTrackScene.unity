@@ -123,6 +123,69 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &178812682
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 178812684}
+  - component: {fileID: 178812683}
+  m_Layer: 0
+  m_Name: TrainTrack (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &178812683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 178812682}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6c7a243182656147b8a183d8bda4927, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  path:
+    points:
+    - {x: -0.33763874, y: -11.045144}
+    - {x: -17.77174, y: 21.617626}
+    - {x: -89.953865, y: 26.019955}
+    - {x: -88.107086, y: -57.481785}
+    - {x: -86.61522, y: -124.9363}
+    - {x: -30.017784, y: -126.75043}
+    - {x: -4.147854, y: -126.423004}
+    - {x: 84.560936, y: -125.300255}
+    - {x: 56.850212, y: -88.9239}
+    - {x: 44.788227, y: -54.381134}
+    isClosedPath: 0
+  AnchorColor: {r: 1, g: 0, b: 0, a: 1}
+  ControlColor: {r: 0, g: 0, b: 1, a: 1}
+  SegmentColor: {r: 0, g: 1, b: 0, a: 1}
+  SelectedSegmentColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  AnchorDia: 6
+  controlDia: 5
+  displayControlPoints: 1
+--- !u!4 &178812684
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 178812682}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 3.2879, y: 3.2879, z: 3.2879}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &584993234
 GameObject:
   m_ObjectHideFlags: 0
@@ -176,7 +239,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 227.48322
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -206,7 +269,68 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1945847710
+--- !u!1001 &883343711
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4790889037961522230, guid: 65a8bfc1cacb13a4b8b48521ec09a64d, type: 3}
+      propertyPath: speed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8301212171914539309, guid: 65a8bfc1cacb13a4b8b48521ec09a64d, type: 3}
+      propertyPath: m_Name
+      value: locomotive
+      objectReference: {fileID: 0}
+    - target: {fileID: 8301212171914539472, guid: 65a8bfc1cacb13a4b8b48521ec09a64d, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8301212171914539472, guid: 65a8bfc1cacb13a4b8b48521ec09a64d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -24.943668
+      objectReference: {fileID: 0}
+    - target: {fileID: 8301212171914539472, guid: 65a8bfc1cacb13a4b8b48521ec09a64d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -16.44674
+      objectReference: {fileID: 0}
+    - target: {fileID: 8301212171914539472, guid: 65a8bfc1cacb13a4b8b48521ec09a64d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8301212171914539472, guid: 65a8bfc1cacb13a4b8b48521ec09a64d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8301212171914539472, guid: 65a8bfc1cacb13a4b8b48521ec09a64d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8301212171914539472, guid: 65a8bfc1cacb13a4b8b48521ec09a64d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8301212171914539472, guid: 65a8bfc1cacb13a4b8b48521ec09a64d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8301212171914539472, guid: 65a8bfc1cacb13a4b8b48521ec09a64d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8301212171914539472, guid: 65a8bfc1cacb13a4b8b48521ec09a64d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8301212171914539472, guid: 65a8bfc1cacb13a4b8b48521ec09a64d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 65a8bfc1cacb13a4b8b48521ec09a64d, type: 3}
+--- !u!1 &1370441262
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -214,23 +338,22 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1945847712}
-  - component: {fileID: 1945847711}
-  - component: {fileID: 1945847713}
+  - component: {fileID: 1370441264}
+  - component: {fileID: 1370441263}
   m_Layer: 0
-  m_Name: TrainTrack
+  m_Name: TrainTrack (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1945847711
+--- !u!114 &1370441263
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1945847710}
+  m_GameObject: {fileID: 1370441262}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b6c7a243182656147b8a183d8bda4927, type: 3}
@@ -238,53 +361,113 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   path:
     points:
-    - {x: -0.35712236, y: -0.4953406}
-    - {x: -0.8977921, y: -0.039625287}
-    - {x: -1.3739709, y: 0.25888485}
-    - {x: -0.8739708, y: 0.75888485}
-    - {x: -0.37397075, y: 1.2588849}
-    - {x: 0.016487837, y: 1.3258319}
-    - {x: 0.40694642, y: 1.3927789}
-    - {x: 0.797405, y: 1.4597259}
-    - {x: 0.9951696, y: 1.204911}
-    - {x: 1.1929342, y: 0.95009613}
-    - {x: 1.3906987, y: 0.69528127}
-    - {x: 1.5927988, y: 0.4425462}
-    - {x: 1.3997685, y: -0.06511319}
-    - {x: 1.1733203, y: -0.66065943}
-    - {x: 0.32844365, y: -1.0731847}
+    - {x: -0.33763874, y: -11.045144}
+    - {x: -57.07066, y: -8.964261}
+    - {x: -46.459282, y: -28.252537}
+    - {x: -48.18437, y: -51.240585}
+    - {x: -50.26478, y: -78.96363}
+    - {x: -27.310362, y: -89.16074}
+    - {x: -0.1294986, y: -89.45424}
+    - {x: 28.126781, y: -89.759346}
+    - {x: 46.226604, y: -81.3949}
+    - {x: 44.788227, y: -54.381134}
+    - {x: 43.514137, y: -30.452797}
+    - {x: 56.395405, y: -13.126027}
+    isClosedPath: 1
   AnchorColor: {r: 1, g: 0, b: 0, a: 1}
   ControlColor: {r: 0, g: 0, b: 1, a: 1}
   SegmentColor: {r: 0, g: 1, b: 0, a: 1}
   SelectedSegmentColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  AnchorDia: 0.1
-  controlDia: 0.075
+  AnchorDia: 6
+  controlDia: 5
   displayControlPoints: 1
---- !u!4 &1945847712
+--- !u!4 &1370441264
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1945847710}
+  m_GameObject: {fileID: 1370441262}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 3.2879, y: 3.2879, z: 3.2879}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1945847713
+--- !u!114 &1497386132 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4790889037961522230, guid: 65a8bfc1cacb13a4b8b48521ec09a64d, type: 3}
+  m_PrefabInstance: {fileID: 883343711}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceafa7d641eb57f4ab9ee6d02e7b08f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &2009959452
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2009959455}
+  - component: {fileID: 2009959454}
+  - component: {fileID: 2009959453}
+  m_Layer: 0
+  m_Name: TrackManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2009959453
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1945847710}
+  m_GameObject: {fileID: 2009959452}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1de780b5b16b11409fca7fcd4627e67, type: 3}
+  m_Script: {fileID: 11500000, guid: 2f1e0b1709ec7b5478e2053b08139120, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Spacing: 0.1
-  Resolution: 1
+  trains:
+  - {fileID: 1497386132}
+  pathGenerator: {fileID: 1370441263}
+--- !u!114 &2009959454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2009959452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d69f0461a6906184f824cb6a3fb0fcd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pathGenerator:
+  - {fileID: 1370441263}
+  - {fileID: 178812683}
+  segments: []
+  Prev: {fileID: 0}
+  First: {fileID: 0}
+--- !u!4 &2009959455
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2009959452}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 50.16587, y: -38.958656, z: -107.010056}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

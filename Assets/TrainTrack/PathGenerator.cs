@@ -15,6 +15,11 @@ public class PathGenerator : MonoBehaviour
     public float controlDia = 0.075f;
     public bool displayControlPoints = true;
 
+    public PathGenerator ConnectEndToPath;
+    public PathGenerator ConnectStartToPath;
+
+    public TrackSegment[] trackSegments;
+
     public void GeneratePath()
     {
         path = new Path(transform.position);
@@ -24,4 +29,51 @@ public class PathGenerator : MonoBehaviour
     {
         GeneratePath();
     }
+
+    public TrackSegment GetClosestSegmentEnd(Vector2 origin)
+    {
+        float minDistToSegment = 0;
+        TrackSegment newSelectedSegment = null;
+
+        for (int i = 0; i < trackSegments.Length; i++)
+        {
+            float dist = Vector2.Distance(origin, trackSegments[i].points[trackSegments[i].points.Length -1].position); //Searching for segment ends, so searching for point 2 in segment
+            if (newSelectedSegment == null)
+            {
+                minDistToSegment = dist;
+                newSelectedSegment = trackSegments[i];
+            }
+            else if (dist < minDistToSegment)
+            {
+                minDistToSegment = dist;
+                newSelectedSegment = trackSegments[i];
+            }
+        }
+
+        return newSelectedSegment;
+    }
+
+    public TrackSegment GetClosestSegmentStart(Vector2 origin)
+    {
+        float minDistToSegment = 0;
+        TrackSegment newSelectedSegment = null;
+
+        for (int i = 0; i < trackSegments.Length; i++)
+        {
+            float dist = Vector2.Distance(origin, path.GetPointsInSegment(i)[0]); //Searching for segment ends, so searching for point 0 in segment
+            if (newSelectedSegment == null)
+            {
+                minDistToSegment = dist;
+                newSelectedSegment = trackSegments[i];
+            }
+            else if (dist < minDistToSegment)
+            {
+                minDistToSegment = dist;
+                newSelectedSegment = trackSegments[i];
+            }
+        }
+
+        return newSelectedSegment;
+    }
+
 }
