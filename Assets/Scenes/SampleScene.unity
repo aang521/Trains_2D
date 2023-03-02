@@ -240,6 +240,7 @@ MonoBehaviour:
   pathGenerator: {fileID: 1690203873}
   wagonPrefab: {fileID: 1091548312887628949, guid: 904ff6a895f0a994dbe4cea03cb6045c, type: 3}
   locomotivePrefab: {fileID: 4790889037961522230, guid: 65a8bfc1cacb13a4b8b48521ec09a64d, type: 3}
+  testDefinition: {fileID: 11400000, guid: 97c0a183c71523a45b574ef2939cfcb9, type: 2}
 --- !u!4 &1078399626
 Transform:
   m_ObjectHideFlags: 0

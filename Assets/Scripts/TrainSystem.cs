@@ -13,6 +13,8 @@ public class TrainSystem : MonoBehaviour
 	public Wagon wagonPrefab;
 	public Train locomotivePrefab;
 
+	public CargoDefinition testDefinition;
+
 	public void Awake()
 	{
 		instance = this;
@@ -29,7 +31,16 @@ public class TrainSystem : MonoBehaviour
 
 		locomotive.AddWagonFront(Instantiate(wagonPrefab));
 		locomotive.AddWagonBack(Instantiate(wagonPrefab));
-		locomotive.AddWagonBack(Instantiate(wagonPrefab));
+
+		var last = Instantiate(wagonPrefab);
+		locomotive.AddWagonBack(last);
+
+		foreach (Train train in trains)
+		{
+			train.UpdatePositions();
+		}
+		last.AddCargo(testDefinition);
+		last.UpdateCargo();
 	}
 
 	public void FixedUpdate()
@@ -45,5 +56,13 @@ public class TrainSystem : MonoBehaviour
 		}
 
 		//TODO resolve collisions
+
+		foreach(Train train in trains)
+		{
+			foreach(Wagon wagon in train.wagons)
+			{
+				wagon.UpdateCargo();
+			}
+		}
 	}
 }
