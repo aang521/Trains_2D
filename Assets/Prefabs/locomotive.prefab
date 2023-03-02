@@ -8,6 +8,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1091548312887628949, guid: 904ff6a895f0a994dbe4cea03cb6045c, type: 3}
+      propertyPath: mass
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1091548312887628949, guid: 904ff6a895f0a994dbe4cea03cb6045c, type: 3}
       propertyPath: isLocomotive
       value: 1
       objectReference: {fileID: 0}

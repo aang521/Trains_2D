@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24eef97279034b14083c855885f81638, type: 3}
   m_Name: TestCargo
   m_EditorClassIdentifier: 
-  mass: 2
-  staticFriction: 18
+  mass: 1
+  staticFriction: 12.5
   frictionCoefficient: 0.5

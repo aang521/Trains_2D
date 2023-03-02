@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4e300513aad2494fbcb7498354cd5a1, type: 3}
   m_Name: TrainSettings
   m_EditorClassIdentifier: 
-  perWagonResistance: 0.4
-  airResistance: 0.8
-  maxAccelerationForce: 80
+  perWagonResistance: 0
+  airResistance: 0.5
+  maxAccelerationForce: 100
   trainAnchorOffset: 9
   trainAnchorMargin: 5
   playerColors:
