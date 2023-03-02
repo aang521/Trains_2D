@@ -12,6 +12,7 @@ public class TrainSettings : ScriptableObject
 
 	//anchor offset from center of wagon
 	public float trainAnchorOffset = 9;
+	public float trainAnchorMargin = 1;
 
 	public List<Color> playerColors = new List<Color>(4);
 	public Color noPlayerColor;

@@ -46,4 +46,10 @@ public class Wagon : MonoBehaviour
 		else
 			spriteRenderer.color = trainSettings.playerColors[train.controller];
 	}
+
+	public void OnDrawGizmos()
+	{
+		Gizmos.DrawSphere(transform.position + transform.right * -trainSettings.trainAnchorOffset, 1);
+		Gizmos.DrawSphere(transform.position + transform.right * trainSettings.trainAnchorOffset, 1);
+	}
 }

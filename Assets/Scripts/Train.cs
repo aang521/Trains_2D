@@ -69,59 +69,96 @@ public class Train : MonoBehaviour
 			else
 				mainWagonIndex = wagons.Count - 1;
 		}
-		Wagon mainWagon = wagons[mainWagonIndex];
 
-		float distToTravel = speed * Time.deltaTime;
-
-		var currentSegment = TrackManager.instance.segments[mainWagon.currentSegment];
-		mainWagon.distanceAlongSegment += distToTravel;
-		while(mainWagon.distanceAlongSegment < 0)
 		{
-			mainWagon.currentSegment -= 1;//TODO this should be something else
-			currentSegment = TrackManager.instance.segments[mainWagon.currentSegment];
-			mainWagon.distanceAlongSegment += currentSegment.length;
-		}
+			Wagon mainWagon = wagons[mainWagonIndex];
+			float distToTravel = speed * Time.deltaTime;
 
-		float remaining = mainWagon.distanceAlongSegment;
-		int currentPointIndex = 0;
-		while (remaining > 0)
-		{
-			remaining -= currentSegment.points[currentPointIndex].nextDist;
-			currentPointIndex++;
-
-			if (currentPointIndex >= currentSegment.points.Length)
+			var currentSegment = TrackManager.instance.segments[mainWagon.currentSegment];
+			mainWagon.distanceAlongSegment += distToTravel;
+			while (mainWagon.distanceAlongSegment < 0)
 			{
-				mainWagon.currentSegment += 1;//TODO this should be something else
+				mainWagon.currentSegment -= 1;//TODO this should be something else
 				currentSegment = TrackManager.instance.segments[mainWagon.currentSegment];
-				currentPointIndex = 0;
-				mainWagon.distanceAlongSegment = remaining; 
+				mainWagon.distanceAlongSegment += currentSegment.length;
 			}
+
+			float remaining = mainWagon.distanceAlongSegment;
+			int currentPointIndex = 0;
+			while (remaining > 0)
+			{
+				remaining -= currentSegment.points[currentPointIndex].nextDist;
+				currentPointIndex++;
+
+				if (currentPointIndex >= currentSegment.points.Length)
+				{
+					mainWagon.currentSegment += 1;//TODO this should be something else
+					currentSegment = TrackManager.instance.segments[mainWagon.currentSegment];
+					currentPointIndex = 0;
+					mainWagon.distanceAlongSegment = remaining;
+				}
+			}
+			mainWagon.transform.position = currentSegment.points[currentPointIndex].position;
+			mainWagon.SetHeading(currentSegment.points[currentPointIndex].tangent);
 		}
-		mainWagon.transform.position = currentSegment.points[currentPointIndex].position;
-		mainWagon.SetHeading(currentSegment.points[currentPointIndex].tangent);
 
-		//for (int i = mainWagonIndex - 1; i >= 0; i--)
-		//{
-		//	Wagon wagon = wagons[i];
-		//	var currentSegment = TrackManager.instance.segments[wagon.currentSegment];
-		//	wagon.distanceAlongSegment += distToTravel;
-		//	if(wagon.travelDirectionAlongSegment > 0)
-		//	{
-		//		float remaining = wagon.distanceAlongSegment;
-		//		int currentPointIndex = 0;
-		//		while(remaining > 0) {
-		//			remaining -= currentSegment.points[currentPointIndex].nextDist;
-		//			currentPointIndex++;
-		//		}
-		//		transform.position = currentSegment.points[currentPointIndex].position;
-		//	}
-		//	//wagon.transform.position = 
-		//}
+		void UpdateWagonPosition(Wagon wagon, Wagon otherWagon, bool behind)
+		{
+			Vector2 prevAnchorPos = (Vector2)otherWagon.transform.position + (Vector2)otherWagon.transform.right * trainSettings.trainAnchorOffset * (behind ? -1 : 1);
 
-		//for (int i = mainWagonIndex + 1; i < wagons.Count; i++)
-		//{
+			var currentSegment = TrackManager.instance.segments[wagon.currentSegment];
 
-		//}
+			//TODO this needs to pick the previous track section
+			if (wagon.currentSegment > 0)
+				wagon.currentSegment -= 1;
+
+			int currentPointIndex = 0;
+			Vector2 currentAnchorPos = currentSegment.points[currentPointIndex].position + currentSegment.points[currentPointIndex].tangent * trainSettings.trainAnchorOffset * (behind ? 1 : -1);
+			float sqrDist = (prevAnchorPos - currentAnchorPos).sqrMagnitude;
+			float bestDist = sqrDist;
+			int bestSegment = wagon.currentSegment;
+			int bestPoint = currentPointIndex;
+			bool foundBetter = true;
+			while (sqrDist > trainSettings.trainAnchorMargin * trainSettings.trainAnchorMargin || foundBetter)
+			{
+				foundBetter = false;
+				currentPointIndex++;
+
+				if (currentPointIndex >= currentSegment.points.Length)
+				{
+					wagon.currentSegment += 1;//TODO this should be something else
+					currentSegment = TrackManager.instance.segments[wagon.currentSegment];
+					currentPointIndex = 0;
+				}
+
+				currentAnchorPos = currentSegment.points[currentPointIndex].position + currentSegment.points[currentPointIndex].tangent * trainSettings.trainAnchorOffset * (behind ? 1 : -1);
+				sqrDist = (prevAnchorPos - currentAnchorPos).sqrMagnitude;
+				if (sqrDist < bestDist)
+				{
+					bestDist = sqrDist;
+					bestSegment = wagon.currentSegment;
+					bestPoint = currentPointIndex;
+					foundBetter = true;
+				}
+			}
+
+			wagon.currentSegment = bestSegment;
+
+			wagon.transform.position = currentSegment.points[bestPoint].position;
+			wagon.SetHeading(currentSegment.points[bestPoint].tangent);
+		}
+
+		//wagon in front
+		for (int i = mainWagonIndex - 1; i >= 0; i--)
+		{
+			UpdateWagonPosition(wagons[i], wagons[i + 1], false);
+		}
+
+		//wagons behind
+		for (int i = mainWagonIndex + 1; i < wagons.Count; i++)
+		{
+			UpdateWagonPosition(wagons[i], wagons[i - 1], true);
+		}
 	}
 
 	public void UpdateTotalMass()
@@ -137,9 +174,16 @@ public class Train : MonoBehaviour
 		}
 	}
 
-	public void AddWagon(Wagon wagon)
+	public void AddWagonBack(Wagon wagon)
 	{
 		wagons.Add(wagon);
+		wagon.SetTrain(this);
+		UpdateTotalMass();
+	}
+
+	public void AddWagonFront(Wagon wagon)
+	{
+		wagons.Insert(0, wagon);
 		wagon.SetTrain(this);
 		UpdateTotalMass();
 	}

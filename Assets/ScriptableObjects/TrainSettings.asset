@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: TrainSettings
   m_EditorClassIdentifier: 
   perWagonResistance: 0.5
-  airResistance: 0.6
-  maxAccelerationForce: 2
-  trainAnchorOffset: 0
+  airResistance: 0.8
+  maxAccelerationForce: 25
+  trainAnchorOffset: 9
+  trainAnchorMargin: 4
   playerColors:
   - {r: 0, g: 0, b: 1, a: 1}
   - {r: 0, g: 1, b: 0, a: 1}

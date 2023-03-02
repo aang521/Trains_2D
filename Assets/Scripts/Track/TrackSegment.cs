@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class TrackSegment : MonoBehaviour
 {
+	[Serializable]
     public struct TrackPoint
 	{
 		public Vector2 position;

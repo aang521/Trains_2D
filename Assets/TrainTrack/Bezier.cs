@@ -24,6 +24,6 @@ public static class Bezier
         Vector2 c2 = ((3*c)-(6*b)+(3*a));
         Vector2 c3 = ((3*b)-(3*a));
 
-        return ((3 * c1 * t * t) + (2 * c2 * t) + c3);
+        return ((3 * c1 * t * t) + (2 * c2 * t) + c3).normalized;
 	}
 }

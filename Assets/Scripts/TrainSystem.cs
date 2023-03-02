@@ -10,6 +10,9 @@ public class TrainSystem : MonoBehaviour
 
 	public PathGenerator pathGenerator;
 
+	public Wagon wagonPrefab;
+	public Train locomotivePrefab;
+
 	public void Awake()
 	{
 		instance = this;
@@ -17,9 +20,16 @@ public class TrainSystem : MonoBehaviour
 
 	public void Start()
 	{
-		trains[0].transform.position = pathGenerator.path.GetPointsInSegment(0)[0];
-		trains[0].wagons[0].currentSegment = 0;
-		trains[0].wagons[0].distanceAlongSegment = 0;
+		var locomotive = Instantiate(locomotivePrefab);
+		trains.Add(locomotive);
+
+		locomotive.wagons[0].transform.position = pathGenerator.path.GetPointsInSegment(0)[0];
+		locomotive.wagons[0].currentSegment = 0;
+		locomotive.wagons[0].distanceAlongSegment = 70;
+
+		locomotive.AddWagonFront(Instantiate(wagonPrefab));
+		locomotive.AddWagonBack(Instantiate(wagonPrefab));
+		locomotive.AddWagonBack(Instantiate(wagonPrefab));
 	}
 
 	public void FixedUpdate()
