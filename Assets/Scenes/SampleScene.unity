@@ -218,7 +218,7 @@ GameObject:
   - component: {fileID: 1078399627}
   - component: {fileID: 1078399625}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: GameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -269,6 +269,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pathGenerator: {fileID: 1690203873}
   segments: []
+  trackHalfWidth: 1
+  trackMaterial: {fileID: 2100000, guid: c88f50c596ca08b4fb906a32eea13e75, type: 2}
 --- !u!1 &1690203872
 GameObject:
   m_ObjectHideFlags: 0
