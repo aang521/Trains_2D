@@ -36,7 +36,7 @@ public class Train : MonoBehaviour
 				acceleration += Input.GetAxis("forwardDebug") - Input.GetAxis("backwardDebug");
 		}
 
-		speed += acceleration * trainSettings.maxAccelerationForce * Time.fixedDeltaTime;
+		speed += acceleration / totalMass * trainSettings.maxAccelerationForce * Time.fixedDeltaTime;
 
 		float airDecceleration = (oldSpeed * trainSettings.airResistance * Time.fixedDeltaTime) / totalMass;
 		if((speed > 0 && airDecceleration > speed) || (speed < 0 && airDecceleration < speed))

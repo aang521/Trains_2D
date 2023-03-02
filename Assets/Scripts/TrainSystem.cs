@@ -35,6 +35,14 @@ public class TrainSystem : MonoBehaviour
 		var last = Instantiate(wagonPrefab);
 		locomotive.AddWagonBack(last);
 
+		locomotive = Instantiate(locomotivePrefab);
+		trains.Add(locomotive);
+		locomotive.controller = 1;
+		locomotive.wagons[0].transform.position = pathGenerator.path.GetPointsInSegment(0)[0];
+		locomotive.wagons[0].currentSegment = 0;
+		locomotive.wagons[0].distanceAlongSegment = 70;
+		locomotive.wagons[0].SetTrain(locomotive);
+
 		foreach (Train train in trains)
 		{
 			train.UpdatePositions();
