@@ -24,6 +24,7 @@ public class Wagon : MonoBehaviour
 
 	public int currentSegment;
 	public float distanceAlongSegment;
+	public bool isInversedOnSegment;
 
 	public bool isLocomotive;
 

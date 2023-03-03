@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Train
@@ -15,7 +16,6 @@ public class Train
     // Who owns the train (0 and higher is player, -1 is no controller)
     public int controller = -1;
 
-    private int NextSegment = 0;
 
     public void Awake()
     {
@@ -90,6 +90,117 @@ public class Train
         }
     }
 
+    private void GetNextTrack(Wagon wagon, float excessDistance)
+	{
+        int NextSegment = 0;
+        if (excessDistance > 0)
+		{
+            Vector2 currentEnd = TrackManager.instance.segments[wagon.currentSegment].points.Last().position;
+
+            //If there is a switch at the end of the current segment
+            if (TrackManager.instance.segments[wagon.currentSegment].Next.Count == 2)
+            {
+                if (Input.GetKey(KeyCode.A))
+                {
+                    NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[wagon.currentSegment].Next[0]);
+                }
+                else if (Input.GetKey(KeyCode.D))
+                {
+                    NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[wagon.currentSegment].Next[1]);
+                }
+                else
+                {
+                    NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[wagon.currentSegment].Next[0]);
+                }
+
+            }
+            else if (TrackManager.instance.segments[wagon.currentSegment].Next.Count == 3)
+            {
+                if (Input.GetKey(KeyCode.A))
+                {
+                    NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[wagon.currentSegment].Next[0]);
+                }
+                else if (Input.GetKey(KeyCode.D))
+                {
+                    NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[wagon.currentSegment].Next[2]);
+                }
+                else
+                {
+                    NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[wagon.currentSegment].Next[1]);
+                }
+            }
+            //If the current segment is a merge with another track
+            else if (TrackManager.instance.segments[wagon.currentSegment].Next.Count == 1)
+            {
+                NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[wagon.currentSegment].Next[0]);
+            }
+
+            wagon.currentSegment = NextSegment;
+
+            Vector2 endA = TrackManager.instance.segments[NextSegment].points[0].position;
+            Vector2 endB = TrackManager.instance.segments[NextSegment].points.Last().position;
+
+            float distA = Vector2.Distance(currentEnd, endA);
+            float distB = Vector2.Distance(currentEnd, endB);
+
+            if (distA > distB)
+                wagon.isInversedOnSegment = !wagon.isInversedOnSegment;
+        }
+		else
+		{
+            Vector2 currentEnd = TrackManager.instance.segments[wagon.currentSegment].points[0].position;
+
+            //If there is a switch at the end of the current segment
+            if (TrackManager.instance.segments[wagon.currentSegment].Prev.Count == 2)
+            {
+                if (Input.GetKey(KeyCode.A))
+                {
+                    NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[wagon.currentSegment].Prev[0]);
+                }
+                else if (Input.GetKey(KeyCode.D))
+                {
+                    NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[wagon.currentSegment].Prev[1]);
+                }
+                else
+                {
+                    NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[wagon.currentSegment].Prev[0]);
+                }
+
+            }
+            else if (TrackManager.instance.segments[wagon.currentSegment].Next.Count == 3)
+            {
+                if (Input.GetKey(KeyCode.A))
+                {
+                    NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[wagon.currentSegment].Prev[0]);
+                }
+                else if (Input.GetKey(KeyCode.D))
+                {
+                    NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[wagon.currentSegment].Prev[2]);
+                }
+                else
+                {
+                    NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[wagon.currentSegment].Prev[1]);
+                }
+            }
+            //If the current segment is a merge with another track
+            else if (TrackManager.instance.segments[wagon.currentSegment].Prev.Count == 1)
+            {
+                NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[wagon.currentSegment].Prev[0]);
+            }
+
+            wagon.currentSegment = NextSegment;
+
+            Vector2 endA = TrackManager.instance.segments[NextSegment].points[0].position;
+            Vector2 endB = TrackManager.instance.segments[NextSegment].points.Last().position;
+
+            float distA = Vector2.Distance(currentEnd, endA);
+            float distB = Vector2.Distance(currentEnd, endB);
+
+            if(distA < distB)
+                wagon.isInversedOnSegment = !wagon.isInversedOnSegment;
+        }
+    }
+
     public void UpdatePositions()
     {
         int mainWagonIndex = wagons.FindIndex(x => x.isLocomotive);
@@ -106,112 +217,53 @@ public class Train
             float distToTravel = speed * Time.deltaTime;
 
             var currentSegment = TrackManager.instance.segments[mainWagon.currentSegment];
-            mainWagon.distanceAlongSegment += distToTravel;
-            while (mainWagon.distanceAlongSegment < 0)
-            {
-                mainWagon.currentSegment = NextSegment;//TODO this should be something else
-                currentSegment = TrackManager.instance.segments[mainWagon.currentSegment];
-                mainWagon.distanceAlongSegment += currentSegment.length;
+            if (mainWagon.isInversedOnSegment)
+                mainWagon.distanceAlongSegment -= distToTravel;
+            else
+                mainWagon.distanceAlongSegment += distToTravel;
+            
+			{
+			    while (mainWagon.distanceAlongSegment < 0)
+			    {
+                    TrackSegment prevSegment = currentSegment;
+                    bool prevInversed = mainWagon.isInversedOnSegment;
+                    float distanceIntoNext = -mainWagon.distanceAlongSegment;
+
+                    GetNextTrack(mainWagon, mainWagon.distanceAlongSegment);
+				    currentSegment = TrackManager.instance.segments[mainWagon.currentSegment];
+
+                    if(mainWagon.isInversedOnSegment != prevInversed)
+                        mainWagon.distanceAlongSegment = distanceIntoNext;
+					else
+                        mainWagon.distanceAlongSegment = currentSegment.length - distanceIntoNext;
+                }
+
+                while (mainWagon.distanceAlongSegment > currentSegment.length)
+                {
+                    TrackSegment prevSegment = currentSegment;
+                    bool prevInversed = mainWagon.isInversedOnSegment;
+                    float distanceIntoNext = mainWagon.distanceAlongSegment - currentSegment.length;
+
+                    GetNextTrack(mainWagon, mainWagon.distanceAlongSegment);
+                    currentSegment = TrackManager.instance.segments[mainWagon.currentSegment];
+
+                    if (mainWagon.isInversedOnSegment != prevInversed)
+                    	mainWagon.distanceAlongSegment = currentSegment.length - distanceIntoNext;
+					else
+						mainWagon.distanceAlongSegment = distanceIntoNext;
+                }
             }
 
-            float remaining = mainWagon.distanceAlongSegment;
+
+			float remaining = mainWagon.distanceAlongSegment;
             int currentPointIndex = 0;
             while (remaining > 0)
             {
                 remaining -= currentSegment.points[currentPointIndex].nextDist;
                 currentPointIndex++;
-
-                if (speed > 0)
-                {
-                    //If there is a switch at the end of the current segment
-                    if (TrackManager.instance.segments[mainWagon.currentSegment].Next.Count == 2)
-                    {
-                        if (Input.GetKey(KeyCode.Q))
-                        {
-                            NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[mainWagon.currentSegment].Next[0]);
-                        }
-                        else if (Input.GetKey(KeyCode.E))
-                        {
-                            NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[mainWagon.currentSegment].Next[1]);
-                        }
-                        else
-                        {
-                            NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[mainWagon.currentSegment].Next[0]);
-                        }
-
-                    }
-                    else if (TrackManager.instance.segments[mainWagon.currentSegment].Next.Count == 3)
-                    {
-                        if (Input.GetKey(KeyCode.Q))
-                        {
-                            NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[mainWagon.currentSegment].Next[0]);
-                        }
-                        else if (Input.GetKey(KeyCode.E))
-                        {
-                            NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[mainWagon.currentSegment].Next[2]);
-                        }
-                        else
-                        {
-                            NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[mainWagon.currentSegment].Next[1]);
-                        }
-                    }
-                    //If the current segment is a merge with another track
-                    else if (TrackManager.instance.segments[mainWagon.currentSegment].Next.Count == 1)
-                    {
-                        NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[mainWagon.currentSegment].Next[0]);
-                    }
-                }
-                else
-                {
-                    //If there is a switch at the end of the current segment
-                    if (TrackManager.instance.segments[mainWagon.currentSegment].Prev.Count == 2)
-                    {
-                        if (Input.GetKey(KeyCode.Q))
-                        {
-                            NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[mainWagon.currentSegment].Prev[0]);
-                        }
-                        else if (Input.GetKey(KeyCode.E))
-                        {
-                            NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[mainWagon.currentSegment].Prev[1]);
-                        }
-                        else
-                        {
-                            NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[mainWagon.currentSegment].Prev[0]);
-                        }
-
-                    }
-                    else if (TrackManager.instance.segments[mainWagon.currentSegment].Next.Count == 3)
-                    {
-                        if (Input.GetKey(KeyCode.Q))
-                        {
-                            NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[mainWagon.currentSegment].Prev[0]);
-                        }
-                        else if (Input.GetKey(KeyCode.E))
-                        {
-                            NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[mainWagon.currentSegment].Prev[2]);
-                        }
-                        else
-                        {
-                            NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[mainWagon.currentSegment].Prev[1]);
-                        }
-                    }
-                    //If the current segment is a merge with another track
-                    else if (TrackManager.instance.segments[mainWagon.currentSegment].Prev.Count == 1)
-                    {
-                        NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[mainWagon.currentSegment].Prev[0]);
-                    }
-                }
-
-                if (currentPointIndex >= currentSegment.points.Length)
-                {
-                    mainWagon.currentSegment = NextSegment;//TODO this should be something else
-                    currentSegment = TrackManager.instance.segments[mainWagon.currentSegment];
-                    currentPointIndex = 0;
-                    mainWagon.distanceAlongSegment = remaining;
-                }
             }
             mainWagon.transform.position = currentSegment.points[currentPointIndex].position;
-            mainWagon.SetHeading(currentSegment.points[currentPointIndex].tangent);
+            mainWagon.SetHeading(currentSegment.points[currentPointIndex].tangent * (mainWagon.isInversedOnSegment ? -1 : 1));
         }
 
         void UpdateWagonPosition(Wagon wagon, Wagon otherWagon, bool behind)
