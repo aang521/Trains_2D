@@ -15,5 +15,5 @@ MonoBehaviour:
   mass: 0.2
   staticFriction: 7
   droppingFine: 5
-  sprite: {fileID: 21300000, guid: 46a04e03902ad9345a33a08e407b3566, type: 3}
-  cargoType: 0
+  sprite: {fileID: 21300000, guid: 9aa0b936d64bd6f44993392facb8d669, type: 3}
+  cargoType: 1
