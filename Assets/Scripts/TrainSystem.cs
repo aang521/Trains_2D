@@ -41,28 +41,27 @@ public class TrainSystem : MonoBehaviour
 		locomotive.wagons[0].currentSegment = 0;
 		locomotive.wagons[0].distanceAlongSegment = 70;
 
-		locomotive.AddWagonFront(Instantiate(wagonPrefab));
+		//locomotive.AddWagonFront(Instantiate(wagonPrefab));
+		locomotive.AddWagonBack(Instantiate(wagonPrefab));
 		locomotive.AddWagonBack(Instantiate(wagonPrefab));
 
-		var last = Instantiate(wagonPrefab);
-		locomotive.AddWagonBack(last);
+		locomotiveWagon = Instantiate(locomotivePrefab);
+		locomotive = new Train();
+		trains.Add(locomotive);
+		locomotive.AddWagonFront(locomotiveWagon);
+		locomotive.controller = 1;
+		locomotive.wagons[0].transform.position = pathGenerator.path.GetPointsInSegment(0)[0];
+		locomotive.wagons[0].currentSegment = 0;
+		locomotive.wagons[0].distanceAlongSegment = 120;
+		locomotive.wagons[0].SetTrain(locomotive);
 
-		//locomotiveWagon = Instantiate(locomotivePrefab);
-		//locomotive = new Train();
-		//trains.Add(locomotive);
-		//locomotive.AddWagonFront(locomotiveWagon);
-		//locomotive.controller = 1;
-		//locomotive.wagons[0].transform.position = pathGenerator.path.GetPointsInSegment(0)[0];
-		//locomotive.wagons[0].currentSegment = 0;
-		//locomotive.wagons[0].distanceAlongSegment = 120;
-		//locomotive.wagons[0].SetTrain(locomotive);
+		locomotive.AddWagonBack(Instantiate(wagonPrefab));
+		locomotive.AddWagonBack(Instantiate(wagonPrefab));
 
 		foreach (Train train in trains)
 		{
 			train.UpdatePositions();
 		}
-		last.AddCargo(testDefinition);
-		last.UpdateCargo();
 	}
 
 	public void Update()
