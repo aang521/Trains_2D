@@ -121,20 +121,38 @@ public class TrackManager : MonoBehaviour
                     if (i == 0)
                     {
                         First = trackSegment;
-                        if (pathGenerator[k].ConnectStartToPath != null)
+                        if (pathGenerator[k].ConnectStartToPath.connector != null)
                         {
-                            TrackSegment connector = pathGenerator[k].ConnectStartToPath.GetClosestSegmentEnd(trackSegment.transform.position);
-                            trackSegment.ConnectPrev(connector);
-                            connector.ConnectNext(trackSegment);
+                            if (pathGenerator[k].ConnectStartToPath.connectToEnd)
+                            {
+                                TrackSegment connector = pathGenerator[k].ConnectStartToPath.connector.GetClosestSegmentEnd(trackSegment.transform.position);
+                                trackSegment.ConnectPrev(connector);
+                                connector.ConnectNext(trackSegment);
+                            }
+                            else if (pathGenerator[k].ConnectStartToPath.connectToStart)
+                            {
+                                TrackSegment connector = pathGenerator[k].ConnectStartToPath.connector.GetClosestSegmentStart(trackSegment.transform.position);
+                                trackSegment.ConnectPrev(connector);
+                                connector.ConnectPrev(trackSegment);
+                            }
                         }
                     }
                     //Connection for the last segment of a track
-                    else if (i >= pathGenerator[k].trackSegments.Length - 1 && pathGenerator[k].ConnectEndToPath != null)
+                    else if (i >= pathGenerator[k].trackSegments.Length - 1 && pathGenerator[k].ConnectEndToPath.connector != null)
                     {
-                        //connecting the ending segment to an existing segment of another generator
-                        TrackSegment connector = pathGenerator[k].ConnectEndToPath.GetClosestSegmentStart(trackSegment.points[trackSegment.points.Length - 1].position);
-                        trackSegment.ConnectNext(connector);
-                        connector.ConnectPrev(trackSegment);
+                        if (pathGenerator[k].ConnectEndToPath.connectToStart)
+                        {
+                            //connecting the ending segment to an existing segment of another generator
+                            TrackSegment connector = pathGenerator[k].ConnectEndToPath.connector.GetClosestSegmentStart(trackSegment.points[trackSegment.points.Length - 1].position);
+                            trackSegment.ConnectNext(connector);
+                            connector.ConnectPrev(trackSegment);
+                        }
+                        else if (pathGenerator[k].ConnectEndToPath.connectToEnd)
+                        {
+                            TrackSegment connector = pathGenerator[k].ConnectEndToPath.connector.GetClosestSegmentEnd(trackSegment.points[trackSegment.points.Length - 1].position);
+                            trackSegment.ConnectNext(connector);
+                            connector.ConnectNext(trackSegment);
+                        }
                     }
 
                     if (Prev != null)

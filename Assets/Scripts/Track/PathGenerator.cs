@@ -15,10 +15,18 @@ public class PathGenerator : MonoBehaviour
     public float controlDia = 0.075f;
     public bool displayControlPoints = true;
 
-    public PathGenerator ConnectEndToPath;
-    public PathGenerator ConnectStartToPath;
+    public Connection ConnectEndToPath;
+    public Connection ConnectStartToPath;
 
     public TrackSegment[] trackSegments;
+
+    [System.Serializable]
+    public struct Connection
+    {
+        public PathGenerator connector;
+        public bool connectToEnd;
+        public bool connectToStart;
+    }
 
     public void GeneratePath()
     {
