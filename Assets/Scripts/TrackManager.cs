@@ -134,10 +134,9 @@ public class TrackManager : MonoBehaviour
                         TrackSegment connector = pathGenerator[k].ConnectEndToPath.GetClosestSegmentStart(trackSegment.points[trackSegment.points.Length - 1].position);
                         trackSegment.ConnectNext(connector);
                         connector.ConnectPrev(trackSegment);
-                        trackSegment.ConnectPrev(Prev);
-                        Prev.ConnectNext(trackSegment);
                     }
-                    else if (Prev != null)
+
+                    if (Prev != null)
                     {
                         trackSegment.ConnectPrev(Prev);
                         Prev.ConnectNext(trackSegment);
