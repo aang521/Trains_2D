@@ -218,7 +218,7 @@ GameObject:
   - component: {fileID: 1078399627}
   - component: {fileID: 1078399625}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: GameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -236,10 +236,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f1e0b1709ec7b5478e2053b08139120, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trains: []
+  trainSettings: {fileID: 11400000, guid: 34ca6d24b08f4c041a8228385a18577d, type: 2}
   pathGenerator: {fileID: 1690203873}
   wagonPrefab: {fileID: 1091548312887628949, guid: 904ff6a895f0a994dbe4cea03cb6045c, type: 3}
-  locomotivePrefab: {fileID: 4790889037961522230, guid: 65a8bfc1cacb13a4b8b48521ec09a64d, type: 3}
+  locomotivePrefab: {fileID: 1339457403816348499, guid: 65a8bfc1cacb13a4b8b48521ec09a64d, type: 3}
+  testDefinition: {fileID: 11400000, guid: 97c0a183c71523a45b574ef2939cfcb9, type: 2}
 --- !u!4 &1078399626
 Transform:
   m_ObjectHideFlags: 0
@@ -268,6 +269,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pathGenerator: {fileID: 1690203873}
   segments: []
+  trackHalfWidth: 1
+  trackMaterial: {fileID: 2100000, guid: c88f50c596ca08b4fb906a32eea13e75, type: 2}
 --- !u!1 &1690203872
 GameObject:
   m_ObjectHideFlags: 0

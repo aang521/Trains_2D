@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Train : MonoBehaviour
+public class Train
 {
-	public TrainSettings trainSettings;
+	public TrainSettings trainSettings { get { return TrainSystem.instance.trainSettings; } }
 
 	//wagons in order from front to back
 	public List<Wagon> wagons = new List<Wagon>();
@@ -17,7 +17,7 @@ public class Train : MonoBehaviour
 
 	private int NextSegment = 0;
 
-	public void Start()
+	public void Awake()
 	{
 		foreach(Wagon wagon in wagons)
 		{
@@ -38,7 +38,7 @@ public class Train : MonoBehaviour
 				acceleration += Input.GetAxis("forwardDebug") - Input.GetAxis("backwardDebug");
 		}
 
-		speed += acceleration * trainSettings.maxAccelerationForce * Time.fixedDeltaTime;
+		speed += acceleration / totalMass * trainSettings.maxAccelerationForce * Time.fixedDeltaTime;
 
 		float airDecceleration = (oldSpeed * trainSettings.airResistance * Time.fixedDeltaTime) / totalMass;
 		if((speed > 0 && airDecceleration > speed) || (speed < 0 && airDecceleration < speed))
@@ -46,16 +46,16 @@ public class Train : MonoBehaviour
 		else
 			speed -= airDecceleration;
 
-		float deccelration = ((trainSettings.perWagonResistance * wagons.Count) / totalMass) * Time.fixedDeltaTime;
+		float decceleration = ((trainSettings.perWagonResistance * wagons.Count) / totalMass) * Time.fixedDeltaTime;
 		if (speed > 0)
 		{
-			speed -= deccelration;
+			speed -= decceleration;
 			if (speed < 0)
 				speed = 0;
 		}
 		else
 		{
-			speed += deccelration;
+			speed += decceleration;
 			if (speed > 0)
 				speed = 0;
 		}
@@ -128,11 +128,12 @@ public class Train : MonoBehaviour
 		{
 			Vector2 prevAnchorPos = (Vector2)otherWagon.transform.position + (Vector2)otherWagon.transform.right * trainSettings.trainAnchorOffset * (behind ? -1 : 1);
 
-			var currentSegment = TrackManager.instance.segments[wagon.currentSegment];
-
 			//TODO this needs to pick the previous track section
-			if (wagon.currentSegment > 0)
-				wagon.currentSegment -= 1;
+			wagon.currentSegment -= 1;
+			if (wagon.currentSegment < 0)
+				wagon.currentSegment = 0;
+
+			var currentSegment = TrackManager.instance.segments[wagon.currentSegment];
 
 			int currentPointIndex = 0;
 			Vector2 currentAnchorPos = currentSegment.points[currentPointIndex].position + currentSegment.points[currentPointIndex].tangent * trainSettings.trainAnchorOffset * (behind ? 1 : -1);
@@ -155,7 +156,7 @@ public class Train : MonoBehaviour
 
 				currentAnchorPos = currentSegment.points[currentPointIndex].position + currentSegment.points[currentPointIndex].tangent * trainSettings.trainAnchorOffset * (behind ? 1 : -1);
 				sqrDist = (prevAnchorPos - currentAnchorPos).sqrMagnitude;
-				if (sqrDist < bestDist)
+				if (sqrDist <= bestDist)
 				{
 					bestDist = sqrDist;
 					bestSegment = wagon.currentSegment;
@@ -165,7 +166,7 @@ public class Train : MonoBehaviour
 			}
 
 			wagon.currentSegment = bestSegment;
-
+			currentSegment = TrackManager.instance.segments[wagon.currentSegment];
 			wagon.transform.position = currentSegment.points[bestPoint].position;
 			wagon.SetHeading(currentSegment.points[bestPoint].tangent);
 		}
@@ -188,6 +189,36 @@ public class Train : MonoBehaviour
 		wagon.currentSegment = TrackManager.instance.segments.IndexOf(nextSegment);
 	}
 
+	public void ResolveCollisions()
+	{
+		//foreach(Wagon wagon in wagons)
+		for(int i = 0; i < wagons.Count; i++)
+		{
+			Wagon wagon = wagons[i];
+			List<Collider2D> results = new List<Collider2D>();
+			ContactFilter2D a = new ContactFilter2D();
+			a.NoFilter();
+			wagon.collider.OverlapCollider(a, results);
+			foreach(Collider2D collider in results)
+			{
+				Wagon otherWagon = collider.GetComponent<Wagon>();
+				//TODO check if collision is at one of the ends of the wagon and is on the same track
+				if(otherWagon.train.controller == -1)
+				{
+					if(i == 0)
+					{
+						AddWagonFront(otherWagon);
+					}
+					else if(i == wagons.Count - 1)
+					{
+						AddWagonBack(otherWagon);
+					}
+				}
+				Debug.Log(otherWagon, otherWagon);
+			}
+		}
+	}
+
 	public void UpdateTotalMass()
 	{
 		totalMass = 0;
@@ -203,6 +234,7 @@ public class Train : MonoBehaviour
 
 	public void AddWagonBack(Wagon wagon)
 	{
+		wagon.train?.RemoveWagon(wagon);
 		wagons.Add(wagon);
 		wagon.SetTrain(this);
 		UpdateTotalMass();
@@ -210,6 +242,7 @@ public class Train : MonoBehaviour
 
 	public void AddWagonFront(Wagon wagon)
 	{
+		wagon.train?.RemoveWagon(wagon);
 		wagons.Insert(0, wagon);
 		wagon.SetTrain(this);
 		UpdateTotalMass();
@@ -218,7 +251,9 @@ public class Train : MonoBehaviour
 	public void RemoveWagon(Wagon wagon)
 	{
 		wagons.Remove(wagon);
-		wagon.SetTrain(this);
+		wagon.SetTrain(null);
 		UpdateTotalMass();
+		if (wagons.Count == 0)
+			TrainSystem.instance.trains.Remove(this);
 	}
 }

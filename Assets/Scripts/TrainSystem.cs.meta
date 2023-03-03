@@ -3,7 +3,12 @@ guid: 2f1e0b1709ec7b5478e2053b08139120
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - trainSettings: {fileID: 11400000, guid: 34ca6d24b08f4c041a8228385a18577d, type: 2}
+  - pathGenerator: {instanceID: 0}
+  - wagonPrefab: {instanceID: 0}
+  - locomotivePrefab: {instanceID: 0}
+  - testDefinition: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

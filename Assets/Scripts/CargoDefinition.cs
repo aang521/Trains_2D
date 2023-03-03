@@ -5,6 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Trains/Cargo Definition")]
 public class CargoDefinition : ScriptableObject
 {
-	public float unitMass;
-	public float escapeForce;
+	public float mass;
+	public float staticFriction;
+	public float frictionCoefficient;
 }
