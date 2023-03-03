@@ -26,6 +26,14 @@ public class PathGenerator : MonoBehaviour
         public PathGenerator connector;
         public bool connectToEnd;
         public bool connectToStart;
+        public Direction direction;
+    }
+
+    public enum Direction
+    {
+        Left,
+        Right,
+        Middle
     }
 
     public void GeneratePath()

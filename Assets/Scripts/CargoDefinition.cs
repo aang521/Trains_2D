@@ -14,6 +14,9 @@ public class CargoDefinition : ScriptableObject
 	public enum CargoType
 	{
 		FISH,
+		OIL,
+		WARES,
+		DAIRY
 	}
 	public CargoType cargoType;
 }

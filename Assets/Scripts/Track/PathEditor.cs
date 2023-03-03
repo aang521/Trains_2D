@@ -43,8 +43,8 @@ public class PathEditor : Editor
 
     private void OnSceneGUI()
     {
-        if (SceneView.onSceneGUIDelegate != Draw)
-            SceneView.onSceneGUIDelegate += Draw;
+        //if (SceneView.onSceneGUIDelegate != Draw)
+         //   SceneView.onSceneGUIDelegate += Draw;
 
         Input();
         Draw();

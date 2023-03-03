@@ -101,8 +101,8 @@ public class TrackManager : MonoBehaviour
                 mesh.SetIndices(indices, MeshTopology.Triangles, 0);
                 mesh.RecalculateBounds();
             }
-            UpdateTrackConnectivity();
         }
+        UpdateTrackConnectivity();
     }
 
     private void UpdateTrackConnectivity()

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class GameManager : MonoBehaviour
 
 	public static GameManager instance;
 
+	public AudioSource muziek;
+
 	public void Awake()
 	{
 		instance = this;
@@ -24,6 +27,7 @@ public class GameManager : MonoBehaviour
 	public void StartGame()
 	{
 		startTime = Time.time;
+		muziek.Play();
 	}
 
 	public void Update()
@@ -33,6 +37,7 @@ public class GameManager : MonoBehaviour
 		if(remainingTime < 0)
 		{
 			playing = false;
+			SceneManager.LoadScene("EindScherm");
 		}
 	}
 }
