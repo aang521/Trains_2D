@@ -1,0 +1,91 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2802226208330643995
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2802226208330643993}
+  - component: {fileID: 2802226208330643992}
+  - component: {fileID: 2802226208330643994}
+  - component: {fileID: 2802226208330643999}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2802226208330643993
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2802226208330643995}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2802226208330643992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2802226208330643995}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d69f0461a6906184f824cb6a3fb0fcd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pathGenerator:
+  - {fileID: 0}
+  segments: []
+  Prev: {fileID: 0}
+  First: {fileID: 0}
+  trackHalfWidth: 1
+  trackMaterial: {fileID: 2100000, guid: c88f50c596ca08b4fb906a32eea13e75, type: 2}
+--- !u!114 &2802226208330643994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2802226208330643995}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f1e0b1709ec7b5478e2053b08139120, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trainSettings: {fileID: 11400000, guid: 34ca6d24b08f4c041a8228385a18577d, type: 2}
+  pathGenerator: {fileID: 0}
+  wagonPrefab: {fileID: 1091548312887628949, guid: 904ff6a895f0a994dbe4cea03cb6045c, type: 3}
+  locomotivePrefab: {fileID: 1339457403816348499, guid: 65a8bfc1cacb13a4b8b48521ec09a64d, type: 3}
+  testDefinition: {fileID: 11400000, guid: 97c0a183c71523a45b574ef2939cfcb9, type: 2}
+--- !u!114 &2802226208330643999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2802226208330643995}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58bacb748b26c5f459f8c68671b49b9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerScores:
+  - 0
+  - 0
+  - 0
+  - 0
+  playing: 1
+  matchDuration: 180
+  startTime: 0
