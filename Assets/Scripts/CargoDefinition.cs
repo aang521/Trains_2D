@@ -9,6 +9,7 @@ public class CargoDefinition : ScriptableObject
 	public float staticFriction;
 
 	public float droppingFine;
+	public Sprite sprite;
 
 	public enum CargoType
 	{

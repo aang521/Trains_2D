@@ -68,6 +68,8 @@ public class Wagon : MonoBehaviour
 		cargo = Instantiate(cargoPrefab);
 		cargo.transform.parent = transform;
 		cargo.definition = definition;
+		cargo.transform.localRotation = Quaternion.identity;
+		cargo.spriteRenderer.sprite = cargo.definition.sprite;
 		cargoPosition = transform.position;
 		prevWagonPos = transform.position;
 
