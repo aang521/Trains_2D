@@ -30,6 +30,18 @@ public class Station : MonoBehaviour
 	[HideInInspector]
 	public Wagon currentLoadingWagon;
 
+	public SpriteRenderer availableCargoSprite;
+
+	public float minCargoSpawnTime;
+	public float maxCargoSpawnTime;
+	[HideInInspector]
+	public float nextSpawnTime;
+
+	public void Awake()
+	{
+		nextSpawnTime = Time.time + UnityEngine.Random.Range(minCargoSpawnTime, maxCargoSpawnTime);
+	}
+
 	public void FixedUpdate()
 	{
 		loadingAreaSprite.color = Color.red;
@@ -81,6 +93,8 @@ public class Station : MonoBehaviour
 				{
 					currentLoadingWagon.AddCargo(currentCargoAvailable);
 					currentCargoAvailable = null;
+					availableCargoSprite.enabled = false;
+					nextSpawnTime = Time.time + UnityEngine.Random.Range(minCargoSpawnTime, maxCargoSpawnTime);
 					Debug.Log("Picked up cargo");
 				}
 			}
@@ -94,6 +108,13 @@ public class Station : MonoBehaviour
 					Debug.Log("Dropped of cargo");
 				}
 			}
+		}
+
+		if(cargoToPickUp && currentCargoAvailable == null && Time.time >= nextSpawnTime)
+		{
+			currentCargoAvailable = cargoToPickUp;
+			availableCargoSprite.enabled = true;
+			availableCargoSprite.sprite = currentCargoAvailable.sprite;
 		}
 	}
 }
