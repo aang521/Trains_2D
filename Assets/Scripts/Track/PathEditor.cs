@@ -16,6 +16,11 @@ public class PathEditor : Editor
     const float segmentSelectDistTres = 0.1f;
     int currentSelectedSegmentIndex = -1;
 
+    void Draw(SceneView sceneView)
+	{
+        Draw();
+    }
+
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
@@ -38,6 +43,9 @@ public class PathEditor : Editor
 
     private void OnSceneGUI()
     {
+        if (SceneView.onSceneGUIDelegate != Draw)
+            SceneView.onSceneGUIDelegate += Draw;
+
         Input();
         Draw();
     }
