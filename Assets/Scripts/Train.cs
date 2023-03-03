@@ -100,11 +100,15 @@ public class Train
             //If there is a switch at the end of the current segment
             if (TrackManager.instance.segments[wagon.currentSegment].Next.Count == 2)
             {
-                if (Input.GetKey(KeyCode.A))
+                if(controller == -1)
+				{
+                    NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[wagon.currentSegment].Next[0]);
+                }
+                else if (Input.GetAxis("direction" + controller) < -0.5 || (controller == 0 && Input.GetKey(KeyCode.A)))
                 {
                     NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[wagon.currentSegment].Next[0]);
                 }
-                else if (Input.GetKey(KeyCode.D))
+                else if (Input.GetAxis("direction" + controller) > 0.5 || (controller == 0 && Input.GetKey(KeyCode.D)))
                 {
                     NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[wagon.currentSegment].Next[1]);
                 }
@@ -116,11 +120,15 @@ public class Train
             }
             else if (TrackManager.instance.segments[wagon.currentSegment].Next.Count == 3)
             {
-                if (Input.GetKey(KeyCode.A))
+                if (controller == -1)
                 {
                     NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[wagon.currentSegment].Next[0]);
                 }
-                else if (Input.GetKey(KeyCode.D))
+                else if (Input.GetAxis("direction" + controller) < -0.5 || (controller == 0 && Input.GetKey(KeyCode.A)))
+                {
+                    NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[wagon.currentSegment].Next[0]);
+                }
+                else if (Input.GetAxis("direction" + controller) > 0.5 || (controller == 0 && Input.GetKey(KeyCode.D)))
                 {
                     NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[wagon.currentSegment].Next[2]);
                 }
@@ -153,11 +161,15 @@ public class Train
             //If there is a switch at the end of the current segment
             if (TrackManager.instance.segments[wagon.currentSegment].Prev.Count == 2)
             {
-                if (Input.GetKey(KeyCode.A))
+                if(controller == -1)
+				{
+                    NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[wagon.currentSegment].Prev[0]);
+                }
+                else if (Input.GetAxis("direction" + controller) < -0.5 || (controller == 0 && Input.GetKey(KeyCode.A)))
                 {
                     NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[wagon.currentSegment].Prev[0]);
                 }
-                else if (Input.GetKey(KeyCode.D))
+                else if (Input.GetAxis("direction" + controller) > 0.5 || (controller == 0 && Input.GetKey(KeyCode.D)))
                 {
                     NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[wagon.currentSegment].Prev[1]);
                 }
@@ -167,13 +179,17 @@ public class Train
                 }
 
             }
-            else if (TrackManager.instance.segments[wagon.currentSegment].Next.Count == 3)
+            else if (TrackManager.instance.segments[wagon.currentSegment].Prev.Count == 3)
             {
-                if (Input.GetKey(KeyCode.A))
+                if (controller == -1)
                 {
                     NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[wagon.currentSegment].Prev[0]);
                 }
-                else if (Input.GetKey(KeyCode.D))
+                else if (Input.GetAxis("direction" + controller) < -0.5 || (controller == 0 && Input.GetKey(KeyCode.A)))
+                {
+                    NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[wagon.currentSegment].Prev[0]);
+                }
+                else if (Input.GetAxis("direction" + controller) > 0.5 || (controller == 0 && Input.GetKey(KeyCode.D)))
                 {
                     NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[wagon.currentSegment].Prev[2]);
                 }
