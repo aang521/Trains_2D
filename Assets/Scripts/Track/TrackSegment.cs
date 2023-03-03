@@ -16,6 +16,7 @@ public class TrackSegment : MonoBehaviour
 
     public TrackPoint[] points;
     public float length;
+    public int generator;
 
     public List<TrackSegment> Next = new List<TrackSegment>();
     public List<TrackSegment> Prev = new List<TrackSegment>();

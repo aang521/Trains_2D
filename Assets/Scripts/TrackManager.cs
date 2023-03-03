@@ -41,6 +41,7 @@ public class TrackManager : MonoBehaviour
 
                 TrackSegment trackSegment = segment.AddComponent<TrackSegment>();
                 segments.Add(trackSegment);
+                trackSegment.generator = k;
                 pathGenerator[k].trackSegments[i] = trackSegment;
                 trackSegment.points = new TrackSegment.TrackPoint[points.Length];
                 MeshFilter meshFilter = segment.AddComponent<MeshFilter>();

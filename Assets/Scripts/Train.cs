@@ -102,11 +102,21 @@ public class Train
 							NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[mainWagon.currentSegment].Next[0]);
 							Debug.Log($"next segment is now {TrackManager.instance.segments[NextSegment]}", TrackManager.instance.segments[NextSegment]);
 						}
-						if (Input.GetKey(KeyCode.E))
+						else if (Input.GetKey(KeyCode.E))
 						{
 							NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[mainWagon.currentSegment].Next[1]);
 							Debug.Log($"next segment is now {TrackManager.instance.segments[NextSegment]}", TrackManager.instance.segments[NextSegment]);
 						}
+						else
+						{
+							NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[mainWagon.currentSegment].Next[0]);
+						}
+
+					}
+					//If the current segment is a merge with another track
+					else if (TrackManager.instance.segments[mainWagon.currentSegment].Next.Count == 1)
+					{
+						NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[mainWagon.currentSegment].Next[0]);
 					}
 					//If the current segment does not have switch capabilities
 					else
