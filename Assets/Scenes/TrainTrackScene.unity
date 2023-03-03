@@ -187,7 +187,7 @@ Transform:
   m_LocalScale: {x: 3.2879, y: 3.2879, z: 3.2879}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &584993234
 GameObject:
@@ -272,75 +272,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &883343711
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4790889037961522230, guid: 65a8bfc1cacb13a4b8b48521ec09a64d, type: 3}
-      propertyPath: speed
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4790889037961522230, guid: 65a8bfc1cacb13a4b8b48521ec09a64d, type: 3}
-      propertyPath: controller
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8301212171914539309, guid: 65a8bfc1cacb13a4b8b48521ec09a64d, type: 3}
-      propertyPath: m_Name
-      value: locomotive
-      objectReference: {fileID: 0}
-    - target: {fileID: 8301212171914539309, guid: 65a8bfc1cacb13a4b8b48521ec09a64d, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8301212171914539472, guid: 65a8bfc1cacb13a4b8b48521ec09a64d, type: 3}
-      propertyPath: m_RootOrder
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8301212171914539472, guid: 65a8bfc1cacb13a4b8b48521ec09a64d, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -24.943668
-      objectReference: {fileID: 0}
-    - target: {fileID: 8301212171914539472, guid: 65a8bfc1cacb13a4b8b48521ec09a64d, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -16.44674
-      objectReference: {fileID: 0}
-    - target: {fileID: 8301212171914539472, guid: 65a8bfc1cacb13a4b8b48521ec09a64d, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8301212171914539472, guid: 65a8bfc1cacb13a4b8b48521ec09a64d, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8301212171914539472, guid: 65a8bfc1cacb13a4b8b48521ec09a64d, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8301212171914539472, guid: 65a8bfc1cacb13a4b8b48521ec09a64d, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8301212171914539472, guid: 65a8bfc1cacb13a4b8b48521ec09a64d, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8301212171914539472, guid: 65a8bfc1cacb13a4b8b48521ec09a64d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8301212171914539472, guid: 65a8bfc1cacb13a4b8b48521ec09a64d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8301212171914539472, guid: 65a8bfc1cacb13a4b8b48521ec09a64d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 65a8bfc1cacb13a4b8b48521ec09a64d, type: 3}
 --- !u!1 &1370441262
 GameObject:
   m_ObjectHideFlags: 0
@@ -407,7 +338,7 @@ Transform:
   m_LocalScale: {x: 3.2879, y: 3.2879, z: 3.2879}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2009959452
 GameObject:
@@ -439,10 +370,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f1e0b1709ec7b5478e2053b08139120, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trains: []
+  trainSettings: {fileID: 11400000, guid: 34ca6d24b08f4c041a8228385a18577d, type: 2}
   pathGenerator: {fileID: 1370441263}
   wagonPrefab: {fileID: 1091548312887628949, guid: 904ff6a895f0a994dbe4cea03cb6045c, type: 3}
-  locomotivePrefab: {fileID: 4790889037961522230, guid: 65a8bfc1cacb13a4b8b48521ec09a64d, type: 3}
+  locomotivePrefab: {fileID: 1339457403816348499, guid: 65a8bfc1cacb13a4b8b48521ec09a64d, type: 3}
+  testDefinition: {fileID: 11400000, guid: 97c0a183c71523a45b574ef2939cfcb9, type: 2}
 --- !u!114 &2009959454
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -461,6 +393,8 @@ MonoBehaviour:
   segments: []
   Prev: {fileID: 0}
   First: {fileID: 0}
+  trackHalfWidth: 1
+  trackMaterial: {fileID: 2100000, guid: c88f50c596ca08b4fb906a32eea13e75, type: 2}
 --- !u!4 &2009959455
 Transform:
   m_ObjectHideFlags: 0
