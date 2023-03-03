@@ -95,7 +95,7 @@ public class Train
                 if (speed > 0)
                 {
                     //If there is a switch at the end of the current segment
-                    if (TrackManager.instance.segments[mainWagon.currentSegment].Next.Count > 1)
+                    if (TrackManager.instance.segments[mainWagon.currentSegment].Next.Count == 2)
                     {
                         if (Input.GetKey(KeyCode.Q))
                         {
@@ -111,6 +111,21 @@ public class Train
                         }
 
                     }
+                    else if (TrackManager.instance.segments[mainWagon.currentSegment].Next.Count == 3)
+                    {
+                        if (Input.GetKey(KeyCode.Q))
+                        {
+                            NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[mainWagon.currentSegment].Next[0]);
+                        }
+                        else if (Input.GetKey(KeyCode.E))
+                        {
+                            NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[mainWagon.currentSegment].Next[2]);
+                        }
+                        else
+                        {
+                            NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[mainWagon.currentSegment].Next[1]);
+                        }
+                    }
                     //If the current segment is a merge with another track
                     else if (TrackManager.instance.segments[mainWagon.currentSegment].Next.Count == 1)
                     {
@@ -120,7 +135,7 @@ public class Train
                 else
                 {
                     //If there is a switch at the end of the current segment
-                    if (TrackManager.instance.segments[mainWagon.currentSegment].Prev.Count > 1)
+                    if (TrackManager.instance.segments[mainWagon.currentSegment].Prev.Count == 2)
                     {
                         if (Input.GetKey(KeyCode.Q))
                         {
@@ -135,6 +150,21 @@ public class Train
                             NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[mainWagon.currentSegment].Prev[0]);
                         }
 
+                    }
+                    else if (TrackManager.instance.segments[mainWagon.currentSegment].Next.Count == 3)
+                    {
+                        if (Input.GetKey(KeyCode.Q))
+                        {
+                            NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[mainWagon.currentSegment].Prev[0]);
+                        }
+                        else if (Input.GetKey(KeyCode.E))
+                        {
+                            NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[mainWagon.currentSegment].Prev[2]);
+                        }
+                        else
+                        {
+                            NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[mainWagon.currentSegment].Prev[1]);
+                        }
                     }
                     //If the current segment is a merge with another track
                     else if (TrackManager.instance.segments[mainWagon.currentSegment].Prev.Count == 1)
