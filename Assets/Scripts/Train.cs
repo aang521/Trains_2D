@@ -13,7 +13,7 @@ public class Train
     public float totalMass;
 
     // Who owns the train (0 and higher is player, -1 is no controller)
-    public int controller;
+    public int controller = -1;
 
     private int NextSegment = 0;
 
@@ -25,6 +25,35 @@ public class Train
         }
         UpdateTotalMass();
     }
+
+    public void DecoupleWagon(Wagon decoupledWagon)
+	{
+        if (!decoupledWagon.isLocomotive)
+        {
+            RemoveWagon(decoupledWagon);
+            Train newTrain = TrainSystem.instance.MakeNewTrain();
+            newTrain.controller = -1;
+            newTrain.AddWagonBack(decoupledWagon);
+            newTrain.speed = this.speed;
+        }
+    }
+
+    public void UpdateInput()
+	{
+        if (controller < 0) return;
+        if (Input.GetButtonDown("decoupleBack" + controller) || controller == 0 && Input.GetButtonDown("decoupleBackDebug"))
+        {
+            if (speed > -0.1)
+                DecoupleWagon(wagons[wagons.Count - 1]);
+        }
+
+        if (Input.GetButtonDown("decoupleFront" + controller) || controller == 0 && Input.GetButtonDown("decoupleFrontDebug"))
+        {
+            if (speed < 0.1)
+                DecoupleWagon(wagons[0]);
+        }
+    }
+
 
     public void UpdateSpeed()
     {
@@ -230,6 +259,12 @@ public class Train
             currentSegment = TrackManager.instance.segments[wagon.currentSegment];
             wagon.transform.position = currentSegment.points[bestPoint].position;
             wagon.SetHeading(currentSegment.points[bestPoint].tangent);
+
+            wagon.distanceAlongSegment = 0;
+            for(int i = 0; i < bestPoint; i++)
+			{
+                wagon.distanceAlongSegment += currentSegment.points[i].nextDist;
+            }
         }
 
         //wagon in front
@@ -266,13 +301,14 @@ public class Train
                 //TODO check if collision is at one of the ends of the wagon and is on the same track
 				if(otherWagon && otherWagon.train.controller == -1)
                 {
-                    if (i == 0)
-                    {
-                        AddWagonFront(otherWagon);
-                    }
-                    else if (i == wagons.Count - 1)
-                    {
+                    //TODO this wont work for when the train move into us, needs some relative velocity
+                    if(speed < 0)
+					{
                         AddWagonBack(otherWagon);
+					}
+					else
+					{
+                        AddWagonFront(otherWagon);
                     }
                 }
             }
@@ -313,7 +349,5 @@ public class Train
         wagons.Remove(wagon);
         wagon.SetTrain(null);
         UpdateTotalMass();
-        if (wagons.Count == 0)
-            TrainSystem.instance.trains.Remove(this);
     }
 }

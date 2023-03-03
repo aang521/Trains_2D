@@ -49,7 +49,7 @@ public class Wagon : MonoBehaviour
 	public void SetTrain(Train train)
 	{
 		this.train = train;
-		if (train.controller == -1)
+		if (train == null || train.controller == -1)
 			spriteRenderer.color = trainSettings.noPlayerColor;
 		else
 			spriteRenderer.color = trainSettings.playerColors[train.controller];

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24eef97279034b14083c855885f81638, type: 3}
   m_Name: Zuivel
   m_EditorClassIdentifier: 
-  mass: 0.5
+  mass: 0.2
   staticFriction: 7
   droppingFine: 5
   sprite: {fileID: 21300000, guid: 46a04e03902ad9345a33a08e407b3566, type: 3}

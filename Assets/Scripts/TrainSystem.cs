@@ -21,10 +21,19 @@ public class TrainSystem : MonoBehaviour
 		instance = this;
 	}
 
+	public Train MakeNewTrain()
+	{
+		Train newTrain = new Train();
+		trains.Add(newTrain);
+
+		return newTrain;
+	}
+
 	public void Start()
 	{
 		var locomotiveWagon = Instantiate(locomotivePrefab);
 		Train locomotive = new Train();
+		locomotive.controller = 0;
 		trains.Add(locomotive);
 		locomotive.AddWagonFront(locomotiveWagon);
 
@@ -56,6 +65,12 @@ public class TrainSystem : MonoBehaviour
 		last.UpdateCargo();
 	}
 
+	public void Update()
+	{
+		for(int i = 0; i < trains.Count; i++)
+			trains[i].UpdateInput();
+	}
+
 	public void FixedUpdate()
 	{
 		if (!GameManager.instance.playing) return;
@@ -80,6 +95,15 @@ public class TrainSystem : MonoBehaviour
 			foreach(Wagon wagon in train.wagons)
 			{
 				wagon.UpdateCargo();
+			}
+		}
+
+		for(int i = 0; i < trains.Count; i++)
+		{
+			if (trains[i].wagons.Count == 0)
+			{
+				trains.RemoveAt(i);
+				i--;
 			}
 		}
 	}
