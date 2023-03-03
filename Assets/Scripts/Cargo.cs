@@ -5,7 +5,7 @@ using UnityEngine;
 public class Cargo : MonoBehaviour
 {
 	public CargoDefinition definition;
-	public Rigidbody2D rigidbody;
+	public new Rigidbody2D rigidbody;
 	public SpriteRenderer spriteRenderer;
 
 	public bool attached = true;

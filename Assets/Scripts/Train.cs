@@ -264,7 +264,7 @@ public class Train
             {
                 Wagon otherWagon = collider.GetComponent<Wagon>();
                 //TODO check if collision is at one of the ends of the wagon and is on the same track
-                if (otherWagon.train.controller == -1)
+				if(otherWagon && otherWagon.train.controller == -1)
                 {
                     if (i == 0)
                     {
@@ -275,7 +275,6 @@ public class Train
                         AddWagonBack(otherWagon);
                     }
                 }
-                Debug.Log(otherWagon, otherWagon);
             }
         }
     }

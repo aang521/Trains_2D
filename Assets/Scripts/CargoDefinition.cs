@@ -7,5 +7,12 @@ public class CargoDefinition : ScriptableObject
 {
 	public float mass;
 	public float staticFriction;
-	public float frictionCoefficient;
+
+	public float droppingFine;
+
+	public enum CargoType
+	{
+		FISH,
+	}
+	public CargoType cargoType;
 }

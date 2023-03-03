@@ -76,6 +76,23 @@ public class Wagon : MonoBehaviour
 		train.UpdateTotalMass();
 	}
 
+	public void RemoveCargo()
+	{
+		Destroy(cargo.gameObject);
+		cargo = null;
+		train.UpdateTotalMass();
+	}
+
+	public void DetachCargo()
+	{
+		if(train.controller >= 0)
+			GameManager.instance.playerScores[train.controller] -= cargo.definition.droppingFine;
+
+		cargo.Detach(cargoVelocity);
+		cargo = null;
+		train.UpdateTotalMass();
+	}
+
 	private Vector2 prevWagonPos;
 	private Vector2 cargoVelocity;
 	public void UpdateCargo()
@@ -101,8 +118,7 @@ public class Wagon : MonoBehaviour
 		Vector2 relativeCargoPos = cargoPosition - (Vector2)transform.position;
 		if(Mathf.Abs(relativeCargoPos.x) > cargoDropThreshold.x || Mathf.Abs(relativeCargoPos.y) > cargoDropThreshold.y)
 		{
-			cargo.Detach(cargoVelocity);
-			cargo = null;
+			DetachCargo();
 		}
 	}
 

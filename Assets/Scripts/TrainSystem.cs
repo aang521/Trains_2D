@@ -32,11 +32,11 @@ public class TrainSystem : MonoBehaviour
 		locomotive.wagons[0].currentSegment = 0;
 		locomotive.wagons[0].distanceAlongSegment = 70;
 
-		//locomotive.AddWagonFront(Instantiate(wagonPrefab));
-		//locomotive.AddWagonBack(Instantiate(wagonPrefab));
+		locomotive.AddWagonFront(Instantiate(wagonPrefab));
+		locomotive.AddWagonBack(Instantiate(wagonPrefab));
 
-		//var last = Instantiate(wagonPrefab);
-		//locomotive.AddWagonBack(last);
+		var last = Instantiate(wagonPrefab);
+		locomotive.AddWagonBack(last);
 
 		//locomotiveWagon = Instantiate(locomotivePrefab);
 		//locomotive = new Train();
@@ -52,12 +52,14 @@ public class TrainSystem : MonoBehaviour
 		{
 			train.UpdatePositions();
 		}
-		//last.AddCargo(testDefinition);
-		//last.UpdateCargo();
+		last.AddCargo(testDefinition);
+		last.UpdateCargo();
 	}
 
 	public void FixedUpdate()
 	{
+		if (!GameManager.instance.playing) return;
+
 		foreach(Train train in trains)
 		{
 			train.UpdateSpeed();
