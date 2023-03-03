@@ -254,7 +254,6 @@ public class Train
                 }
             }
 
-
 			float remaining = mainWagon.distanceAlongSegment;
             int currentPointIndex = 0;
             while (remaining > 0)
@@ -266,55 +265,78 @@ public class Train
             mainWagon.SetHeading(currentSegment.points[currentPointIndex].tangent * (mainWagon.isInversedOnSegment ? -1 : 1));
         }
 
-        void UpdateWagonPosition(Wagon wagon, Wagon otherWagon, bool behind)
+        void UpdateWagonPosition(Wagon wagon, int wagonIndex, Wagon otherWagon, bool behind)
         {
-            Vector2 prevAnchorPos = (Vector2)otherWagon.transform.position + (Vector2)otherWagon.transform.right * trainSettings.trainAnchorOffset * (behind ? -1 : 1);
+            Vector2 otherAnchorPos = (Vector2)otherWagon.transform.position + (Vector2)otherWagon.transform.right * trainSettings.trainAnchorOffset * (behind ? -1 : 1);
 
-            //TODO this needs to pick the previous track section
-            wagon.currentSegment -= 1;
-            if (wagon.currentSegment < 0)
-                wagon.currentSegment = 0;
 
             var currentSegment = TrackManager.instance.segments[wagon.currentSegment];
-
             int currentPointIndex = 0;
+
+            float remaining = wagon.distanceAlongSegment;
+            while(remaining > 0)
+            {
+                remaining -= currentSegment.points[currentPointIndex].nextDist;
+                currentPointIndex++;
+                if (currentPointIndex >= currentSegment.points.Length)
+				{
+                    currentPointIndex = 0;
+                    return;
+				}
+            }
+
             Vector2 currentAnchorPos = currentSegment.points[currentPointIndex].position + currentSegment.points[currentPointIndex].tangent * trainSettings.trainAnchorOffset * (behind ? 1 : -1);
-            float sqrDist = (prevAnchorPos - currentAnchorPos).sqrMagnitude;
+            float sqrDist = (otherAnchorPos - currentAnchorPos).sqrMagnitude;
             float bestDist = sqrDist;
             int bestSegment = wagon.currentSegment;
             int bestPoint = currentPointIndex;
-            bool foundBetter = true;
-            while (sqrDist > trainSettings.trainAnchorMargin * trainSettings.trainAnchorMargin || foundBetter)
+            bool bestInversed = wagon.isInversedOnSegment;
+            while (sqrDist > trainSettings.trainAnchorMargin * trainSettings.trainAnchorMargin)
             {
-                foundBetter = false;
-                currentPointIndex++;
+                if (speed * (wagon.isInversedOnSegment ? -1 : 1) > 0)
+                    currentPointIndex++;
+                else
+                    currentPointIndex--;
 
-                if (currentPointIndex >= currentSegment.points.Length)
-                {
-                    wagon.currentSegment += 1;//TODO this should be something else
+                if(currentPointIndex < 0)
+				{
+                    GetNextTrack(wagon, -1);
                     currentSegment = TrackManager.instance.segments[wagon.currentSegment];
-                    currentPointIndex = 0;
+
+                    currentPointIndex = !wagon.isInversedOnSegment ? currentSegment.points.Length-1 : 0;
+                }
+                if(currentPointIndex >= currentSegment.points.Length)
+				{
+                    GetNextTrack(wagon, 1);
+                    currentSegment = TrackManager.instance.segments[wagon.currentSegment];
+
+                    currentPointIndex = !wagon.isInversedOnSegment ? 0 : currentSegment.points.Length - 1;
                 }
 
                 currentAnchorPos = currentSegment.points[currentPointIndex].position + currentSegment.points[currentPointIndex].tangent * trainSettings.trainAnchorOffset * (behind ? 1 : -1);
-                sqrDist = (prevAnchorPos - currentAnchorPos).sqrMagnitude;
-                if (sqrDist <= bestDist)
+                sqrDist = (otherAnchorPos - currentAnchorPos).sqrMagnitude;
+                if (sqrDist < bestDist)
                 {
                     bestDist = sqrDist;
                     bestSegment = wagon.currentSegment;
                     bestPoint = currentPointIndex;
-                    foundBetter = true;
+                    bestInversed = wagon.isInversedOnSegment;
                 }
+				else
+				{
+                    break;
+				}
             }
 
+            wagon.isInversedOnSegment = bestInversed;
             wagon.currentSegment = bestSegment;
             currentSegment = TrackManager.instance.segments[wagon.currentSegment];
             wagon.transform.position = currentSegment.points[bestPoint].position;
-            wagon.SetHeading(currentSegment.points[bestPoint].tangent);
+            wagon.SetHeading(currentSegment.points[bestPoint].tangent * (wagon.isInversedOnSegment ? -1 : 1));
 
             wagon.distanceAlongSegment = 0;
-            for(int i = 0; i < bestPoint; i++)
-			{
+            for (int i = 0; i < bestPoint; i++)
+            {
                 wagon.distanceAlongSegment += currentSegment.points[i].nextDist;
             }
         }
@@ -322,13 +344,13 @@ public class Train
         //wagon in front
         for (int i = mainWagonIndex - 1; i >= 0; i--)
         {
-            UpdateWagonPosition(wagons[i], wagons[i + 1], false);
+            UpdateWagonPosition(wagons[i], i, wagons[i + 1], false);
         }
 
         //wagons behind
         for (int i = mainWagonIndex + 1; i < wagons.Count; i++)
         {
-            UpdateWagonPosition(wagons[i], wagons[i - 1], true);
+            UpdateWagonPosition(wagons[i], i, wagons[i - 1], true);
         }
     }
 
