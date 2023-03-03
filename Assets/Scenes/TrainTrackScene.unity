@@ -272,6 +272,72 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &638653890
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 638653892}
+  - component: {fileID: 638653891}
+  m_Layer: 0
+  m_Name: TrainTrack (3)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &638653891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 638653890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6c7a243182656147b8a183d8bda4927, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  path:
+    points:
+    - {x: -89.84406, y: -57.70604}
+    - {x: -92.52231, y: -106.868546}
+    - {x: -126.10753, y: -10.6863785}
+    - {x: -124.26075, y: -94.18812}
+    - {x: -122.76888, y: -161.64255}
+    - {x: -74.63228, y: -177.48737}
+    - {x: -48.762356, y: -177.15994}
+    - {x: 39.946453, y: -176.03719}
+    - {x: -35.937233, y: -137.03876}
+    - {x: -4.1491942, y: -126.82749}
+    isClosedPath: 0
+  AnchorColor: {r: 1, g: 0, b: 0, a: 1}
+  ControlColor: {r: 0, g: 0, b: 1, a: 1}
+  SegmentColor: {r: 0, g: 1, b: 0, a: 1}
+  SelectedSegmentColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  AnchorDia: 6
+  controlDia: 5
+  displayControlPoints: 1
+  ConnectEndToPath: {fileID: 178812683}
+  ConnectStartToPath: {fileID: 178812683}
+  trackSegments: []
+--- !u!4 &638653892
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 638653890}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 3.2879, y: 3.2879, z: 3.2879}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1370441262
 GameObject:
   m_ObjectHideFlags: 0
@@ -390,6 +456,7 @@ MonoBehaviour:
   pathGenerator:
   - {fileID: 1370441263}
   - {fileID: 178812683}
+  - {fileID: 638653891}
   segments: []
   Prev: {fileID: 0}
   First: {fileID: 0}
