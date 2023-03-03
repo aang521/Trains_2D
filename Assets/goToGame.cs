@@ -6,7 +6,7 @@ public class goToGame : MonoBehaviour
 {
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.anyKey)
             SceneManager.LoadScene("ZuidHollandMap");
     }
 }

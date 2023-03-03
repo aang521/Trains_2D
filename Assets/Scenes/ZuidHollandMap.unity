@@ -262,9 +262,49 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8300895715820401151, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
+      propertyPath: loadTime
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8300895715820401151, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
       propertyPath: cargoToPickUp
       value: 
       objectReference: {fileID: 11400000, guid: 31e6932d456e83b4396513385de54845, type: 2}
+    - target: {fileID: 8300895715820401151, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
+      propertyPath: acceptedCargos.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8300895715820401151, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
+      propertyPath: acceptedCargos.Array.data[0].type
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8300895715820401151, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
+      propertyPath: acceptedCargos.Array.data[1].type
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8300895715820401151, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
+      propertyPath: acceptedCargos.Array.data[2].type
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8300895715820401151, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
+      propertyPath: possibleCargosToPickUp.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8300895715820401151, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
+      propertyPath: acceptedCargos.Array.data[0].price
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 8300895715820401151, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
+      propertyPath: acceptedCargos.Array.data[1].price
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 8300895715820401151, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
+      propertyPath: acceptedCargos.Array.data[2].price
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 8300895715820401151, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
+      propertyPath: possibleCargosToPickUp.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: cede9ffd53798c34f8ef9095f5379557, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
 --- !u!1 &105589342
@@ -1139,9 +1179,49 @@ PrefabInstance:
       value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 8300895715820401151, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
+      propertyPath: loadTime
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8300895715820401151, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
       propertyPath: cargoToPickUp
       value: 
       objectReference: {fileID: 11400000, guid: cede9ffd53798c34f8ef9095f5379557, type: 2}
+    - target: {fileID: 8300895715820401151, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
+      propertyPath: acceptedCargos.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8300895715820401151, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
+      propertyPath: acceptedCargos.Array.data[0].type
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8300895715820401151, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
+      propertyPath: acceptedCargos.Array.data[1].type
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8300895715820401151, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
+      propertyPath: acceptedCargos.Array.data[2].type
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8300895715820401151, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
+      propertyPath: possibleCargosToPickUp.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8300895715820401151, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
+      propertyPath: acceptedCargos.Array.data[0].price
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 8300895715820401151, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
+      propertyPath: acceptedCargos.Array.data[1].price
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 8300895715820401151, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
+      propertyPath: acceptedCargos.Array.data[2].price
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 8300895715820401151, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
+      propertyPath: possibleCargosToPickUp.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 7a8969aeb3dd85d45ba9110031eab680, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
 --- !u!1 &592620384
@@ -1370,6 +1450,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: UI
       objectReference: {fileID: 0}
+    - target: {fileID: 4407907062848501786, guid: 645b706102607664d875d39dc58e42c7, type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4407907062848501786, guid: 645b706102607664d875d39dc58e42c7, type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 1920
+      objectReference: {fileID: 0}
+    - target: {fileID: 4407907062848501786, guid: 645b706102607664d875d39dc58e42c7, type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 1080
+      objectReference: {fileID: 0}
     - target: {fileID: 4407907062848501796, guid: 645b706102607664d875d39dc58e42c7, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -1472,11 +1564,11 @@ PrefabInstance:
       objectReference: {fileID: 9003397975169146415, guid: 5973f6e67bbe7084999a935136c390a6, type: 2}
     - target: {fileID: 4407907063396134408, guid: 645b706102607664d875d39dc58e42c7, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -955
+      value: -670
       objectReference: {fileID: 0}
     - target: {fileID: 4407907063396134408, guid: 645b706102607664d875d39dc58e42c7, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 490
+      value: 325
       objectReference: {fileID: 0}
     - target: {fileID: 4407907063578286985, guid: 645b706102607664d875d39dc58e42c7, type: 3}
       propertyPath: m_fontAsset
@@ -2190,9 +2282,45 @@ PrefabInstance:
       value: 53.385
       objectReference: {fileID: 0}
     - target: {fileID: 8300895715820401151, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
+      propertyPath: loadTime
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8300895715820401151, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
       propertyPath: cargoToPickUp
       value: 
       objectReference: {fileID: 11400000, guid: 7a8969aeb3dd85d45ba9110031eab680, type: 2}
+    - target: {fileID: 8300895715820401151, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
+      propertyPath: acceptedCargos.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8300895715820401151, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
+      propertyPath: acceptedCargos.Array.data[1].type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8300895715820401151, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
+      propertyPath: acceptedCargos.Array.data[2].type
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8300895715820401151, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
+      propertyPath: possibleCargosToPickUp.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8300895715820401151, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
+      propertyPath: acceptedCargos.Array.data[0].price
+      value: 400
+      objectReference: {fileID: 0}
+    - target: {fileID: 8300895715820401151, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
+      propertyPath: acceptedCargos.Array.data[1].price
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 8300895715820401151, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
+      propertyPath: acceptedCargos.Array.data[2].price
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 8300895715820401151, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
+      propertyPath: possibleCargosToPickUp.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 97c0a183c71523a45b574ef2939cfcb9, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
 --- !u!1001 &1694756193
@@ -2251,6 +2379,10 @@ PrefabInstance:
       value: -180
       objectReference: {fileID: 0}
     - target: {fileID: 8300895715820401151, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
+      propertyPath: loadTime
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8300895715820401151, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
       propertyPath: cargoToPickUp
       value: 
       objectReference: {fileID: 11400000, guid: 97c0a183c71523a45b574ef2939cfcb9, type: 2}
@@ -2259,13 +2391,37 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8300895715820401151, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
+      propertyPath: acceptedCargos.Array.data[0].type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8300895715820401151, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
+      propertyPath: acceptedCargos.Array.data[1].type
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8300895715820401151, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
+      propertyPath: acceptedCargos.Array.data[2].type
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8300895715820401151, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
+      propertyPath: possibleCargosToPickUp.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8300895715820401151, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
       propertyPath: acceptedCargos.Array.data[0].price
-      value: 100
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 8300895715820401151, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
       propertyPath: acceptedCargos.Array.data[1].price
-      value: 100
+      value: 200
       objectReference: {fileID: 0}
+    - target: {fileID: 8300895715820401151, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
+      propertyPath: acceptedCargos.Array.data[2].price
+      value: 400
+      objectReference: {fileID: 0}
+    - target: {fileID: 8300895715820401151, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
+      propertyPath: possibleCargosToPickUp.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 31e6932d456e83b4396513385de54845, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 561e96105ea5c074eabe5b27d977eb4c, type: 3}
 --- !u!4 &1694945543 stripped
