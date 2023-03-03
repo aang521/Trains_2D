@@ -285,14 +285,35 @@ public class Train
 				}
             }
 
+            if (speed * (wagon.isInversedOnSegment ? -1 : 1) > 0)
+                currentPointIndex--;
+            else
+                currentPointIndex++;
+            if (currentPointIndex < 0)
+            {
+                GetNextTrack(wagon, -1);
+                currentSegment = TrackManager.instance.segments[wagon.currentSegment];
+
+                currentPointIndex = !wagon.isInversedOnSegment ? currentSegment.points.Length - 1 : 0;
+            }
+            if (currentPointIndex >= currentSegment.points.Length)
+            {
+                GetNextTrack(wagon, 1);
+                currentSegment = TrackManager.instance.segments[wagon.currentSegment];
+
+                currentPointIndex = !wagon.isInversedOnSegment ? 0 : currentSegment.points.Length - 1;
+            }
+
             Vector2 currentAnchorPos = currentSegment.points[currentPointIndex].position + currentSegment.points[currentPointIndex].tangent * trainSettings.trainAnchorOffset * (behind ? 1 : -1);
             float sqrDist = (otherAnchorPos - currentAnchorPos).sqrMagnitude;
             float bestDist = sqrDist;
             int bestSegment = wagon.currentSegment;
             int bestPoint = currentPointIndex;
             bool bestInversed = wagon.isInversedOnSegment;
-            while (sqrDist > trainSettings.trainAnchorMargin * trainSettings.trainAnchorMargin)
+            bool foundBetter = true;
+            while (sqrDist > trainSettings.trainAnchorMargin * trainSettings.trainAnchorMargin || foundBetter)
             {
+                foundBetter = false;
                 if (speed * (wagon.isInversedOnSegment ? -1 : 1) > 0)
                     currentPointIndex++;
                 else
@@ -321,6 +342,7 @@ public class Train
                     bestSegment = wagon.currentSegment;
                     bestPoint = currentPointIndex;
                     bestInversed = wagon.isInversedOnSegment;
+                    foundBetter = true;
                 }
 				else
 				{
