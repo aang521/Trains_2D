@@ -8,12 +8,14 @@ public class Train : MonoBehaviour
 
 	//wagons in order from front to back
 	public List<Wagon> wagons = new List<Wagon>();
-	
+
 	public float speed;
 	public float totalMass;
 
 	// Who owns the train (0 and higher is player, -1 is no controller)
 	public int controller;
+
+	private int NextSegment = 0;
 
 	public void Start()
 	{
@@ -92,7 +94,27 @@ public class Train : MonoBehaviour
 
 				if (currentPointIndex >= currentSegment.points.Length)
 				{
-					mainWagon.currentSegment += 1;//TODO this should be something else
+					//If there is a switch at the end of the current segment
+					if (TrackManager.instance.segments[mainWagon.currentSegment].Next.Count > 1)
+					{
+						if (Input.GetKey(KeyCode.Q))
+						{
+							NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[mainWagon.currentSegment].Next[0]);
+							Debug.Log($"next segment is now {TrackManager.instance.segments[NextSegment]}", TrackManager.instance.segments[NextSegment]);
+						}
+						if (Input.GetKey(KeyCode.E))
+						{
+							NextSegment = TrackManager.instance.segments.IndexOf(TrackManager.instance.segments[mainWagon.currentSegment].Next[1]);
+							Debug.Log($"next segment is now {TrackManager.instance.segments[NextSegment]}", TrackManager.instance.segments[NextSegment]);
+						}
+					}
+					//If the current segment does not have switch capabilities
+					else
+					{
+						NextSegment = mainWagon.currentSegment + 1;
+					}
+
+					mainWagon.currentSegment = NextSegment;//TODO this should be something else
 					currentSegment = TrackManager.instance.segments[mainWagon.currentSegment];
 					currentPointIndex = 0;
 					mainWagon.distanceAlongSegment = remaining;
@@ -159,6 +181,11 @@ public class Train : MonoBehaviour
 		{
 			UpdateWagonPosition(wagons[i], wagons[i - 1], true);
 		}
+	}
+
+	public void SelectSwitchTrack(Wagon wagon, TrackSegment nextSegment)
+	{
+		wagon.currentSegment = TrackManager.instance.segments.IndexOf(nextSegment);
 	}
 
 	public void UpdateTotalMass()
