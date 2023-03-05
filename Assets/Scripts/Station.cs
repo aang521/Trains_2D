@@ -21,7 +21,7 @@ public class Station : MonoBehaviour
 
 	public List<AcceptedCargo> acceptedCargos = new List<AcceptedCargo>();
 
-	public List<CargoDefinition> possibleCargosToPickUp = new List<CargoDefinition>();
+	[HideInInspector]
 	public CargoDefinition currentCargoAvailable;
 
 	public float loadTime;
@@ -96,6 +96,7 @@ public class Station : MonoBehaviour
 					availableCargoSprite.enabled = false;
 					nextSpawnTime = Time.time + UnityEngine.Random.Range(minCargoSpawnTime, maxCargoSpawnTime);
 					Debug.Log("Picked up cargo");
+					currentLoadingWagon = null;
 				}
 			}
 			else
@@ -106,6 +107,7 @@ public class Station : MonoBehaviour
 					currentLoadingWagon.RemoveCargo();
 					GameManager.instance.playerScores[currentLoadingWagon.train.controller] += acceptedCargos[index].price;
 					Debug.Log("Dropped of cargo");
+					currentLoadingWagon = null;
 				}
 			}
 		}

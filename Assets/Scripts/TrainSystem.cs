@@ -9,10 +9,10 @@ public class TrainSystem : MonoBehaviour
 
 	public List<Train> trains = new List<Train>();
 
-	public PathGenerator pathGenerator;
-
 	public Wagon wagonPrefab;
 	public Wagon locomotivePrefab;
+
+	public int startWagonCount = 2;
 
 	public CargoDefinition testDefinition;
 
@@ -31,32 +31,36 @@ public class TrainSystem : MonoBehaviour
 
 	public void Start()
 	{
-		var locomotiveWagon = Instantiate(locomotivePrefab);
-		Train locomotive = new Train();
-		locomotive.controller = 0;
-		trains.Add(locomotive);
-		locomotive.AddWagonFront(locomotiveWagon);
+		SpawnPoint[] spawnPoints = FindObjectsOfType<SpawnPoint>();
+		foreach(SpawnPoint spawnPoint in spawnPoints)
+		{
+			var locomotiveWagon = Instantiate(locomotivePrefab);
+			Train locomotive = new Train();
+			locomotive.controller = spawnPoint.playerIndex;
+			trains.Add(locomotive);
+			locomotive.AddWagonFront(locomotiveWagon);
 
-		locomotive.wagons[0].transform.position = pathGenerator.path.GetPointsInSegment(0)[0];
-		locomotive.wagons[0].currentSegment = 0;
-		locomotive.wagons[0].distanceAlongSegment = 00;
+			locomotive.speed = 0.01f;
+			locomotiveWagon.isInversedOnSegment = spawnPoint.reverseDirection;
 
-		//locomotive.AddWagonFront(Instantiate(wagonPrefab));
-		locomotive.AddWagonBack(Instantiate(wagonPrefab));
-		locomotive.AddWagonBack(Instantiate(wagonPrefab));
+			locomotive.wagons[0].currentSegment = spawnPoint.segmentIndex;
+			float distance = 0;
+			for(int i = 0; i < spawnPoint.pointIndex; i++)
+			{
+				distance += TrackManager.instance.segments[spawnPoint.segmentIndex].points[i].nextDist;
+			}
+			locomotive.wagons[0].distanceAlongSegment = distance;
 
-		//locomotiveWagon = Instantiate(locomotivePrefab);
-		//locomotive = new Train();
-		//trains.Add(locomotive);
-		//locomotive.AddWagonFront(locomotiveWagon);
-		//locomotive.controller = 1;
-		//locomotive.wagons[0].transform.position = pathGenerator.path.GetPointsInSegment(0)[0];
-		//locomotive.wagons[0].currentSegment = 0;
-		//locomotive.wagons[0].distanceAlongSegment = 120;
-		//locomotive.wagons[0].SetTrain(locomotive);
-
-		//locomotive.AddWagonBack(Instantiate(wagonPrefab));
-		//locomotive.AddWagonBack(Instantiate(wagonPrefab));
+			for(int i = 0; i < startWagonCount; i++)
+			{
+				Wagon wagon = Instantiate(wagonPrefab);
+				locomotive.AddWagonBack(wagon);
+				wagon.currentSegment = spawnPoint.segmentIndex;
+				if(spawnPoint.reverseDirection)
+					wagon.distanceAlongSegment = TrackManager.instance.segments[spawnPoint.segmentIndex].length;
+				wagon.isInversedOnSegment = spawnPoint.reverseDirection;
+			}
+		}
 
 		foreach (Train train in trains)
 		{

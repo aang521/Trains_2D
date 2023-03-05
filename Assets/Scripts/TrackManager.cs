@@ -7,7 +7,7 @@ public class TrackManager : MonoBehaviour
 {
     public static TrackManager instance;
 
-    public PathGenerator[] pathGenerator;
+    public PathGenerator[] pathGenerators;
 
     public List<TrackSegment> segments = new List<TrackSegment>();
 
@@ -23,19 +23,19 @@ public class TrackManager : MonoBehaviour
 
     public void SetupLevel()
     {
-        for (int k = 0; k < pathGenerator.Length; k++)
+        for (int k = 0; k < pathGenerators.Length; k++)
         {
-            if (!pathGenerator[k].path.IsClosed)
+            if (!pathGenerators[k].path.IsClosed)
             {
-                if (pathGenerator[k].ConnectEndToPath.connector != null)
+                if (pathGenerators[k].ConnectEndToPath.connector != null)
                 {
                     float smallestDist = float.MaxValue;
                     Vector2 newPos = Vector2.zero;
-                    for (int i = 0; i < pathGenerator[k].ConnectEndToPath.connector.path.NumberOfSegments; i++)
+                    for (int i = 0; i < pathGenerators[k].ConnectEndToPath.connector.path.NumberOfSegments; i++)
                     {
-                        var points = pathGenerator[k].ConnectEndToPath.connector.path.GetPointsInSegment(i);
-                        float dist = (points[0] - pathGenerator[k].path.GetPointsInSegment(pathGenerator[k].path.NumberOfSegments - 1)[3]).sqrMagnitude;
-                        float dist2 = (points[3] - pathGenerator[k].path.GetPointsInSegment(pathGenerator[k].path.NumberOfSegments - 1)[3]).sqrMagnitude;
+                        var points = pathGenerators[k].ConnectEndToPath.connector.path.GetPointsInSegment(i);
+                        float dist = (points[0] - pathGenerators[k].path.GetPointsInSegment(pathGenerators[k].path.NumberOfSegments - 1)[3]).sqrMagnitude;
+                        float dist2 = (points[3] - pathGenerators[k].path.GetPointsInSegment(pathGenerators[k].path.NumberOfSegments - 1)[3]).sqrMagnitude;
 
                         if (dist < smallestDist)
                         {
@@ -48,17 +48,17 @@ public class TrackManager : MonoBehaviour
                             newPos = points[3];
                         }
                     }
-                    pathGenerator[k].path.MovePoint((pathGenerator[k].path.NumberOfSegments - 1)*3 + 3, newPos);
+                    pathGenerators[k].path.MovePoint((pathGenerators[k].path.NumberOfSegments - 1)*3 + 3, newPos);
                 }
-                if (pathGenerator[k].ConnectStartToPath.connector != null)
+                if (pathGenerators[k].ConnectStartToPath.connector != null)
                 {
                     float smallestDist = float.MaxValue;
                     Vector2 newPos = Vector2.zero;
-                    for (int i = 0; i < pathGenerator[k].ConnectStartToPath.connector.path.NumberOfSegments; i++)
+                    for (int i = 0; i < pathGenerators[k].ConnectStartToPath.connector.path.NumberOfSegments; i++)
                     {
-                        var points = pathGenerator[k].ConnectStartToPath.connector.path.GetPointsInSegment(i);
-                        float dist = (points[0] - pathGenerator[k].path.GetPointsInSegment(0)[0]).sqrMagnitude;
-                        float dist2 = (points[3] - pathGenerator[k].path.GetPointsInSegment(0)[0]).sqrMagnitude;
+                        var points = pathGenerators[k].ConnectStartToPath.connector.path.GetPointsInSegment(i);
+                        float dist = (points[0] - pathGenerators[k].path.GetPointsInSegment(0)[0]).sqrMagnitude;
+                        float dist2 = (points[3] - pathGenerators[k].path.GetPointsInSegment(0)[0]).sqrMagnitude;
 
                         if (dist < smallestDist)
                         {
@@ -71,29 +71,34 @@ public class TrackManager : MonoBehaviour
                             newPos = points[3];
                         }
                     }
-                    pathGenerator[k].path.MovePoint(0, newPos);
+                    pathGenerators[k].path.MovePoint(0, newPos);
                 }
             }
         }
 
+        for(int i = 0; i < transform.childCount; i++)
+		{
+            DestroyImmediate(transform.GetChild(i).gameObject);
+		}
         GameObject track = new GameObject("Track");
-        for (int k = 0; k < pathGenerator.Length; k++)
+        track.transform.parent = transform;
+        for (int k = 0; k < pathGenerators.Length; k++)
         {
-            pathGenerator[k].trackSegments = new TrackSegment[pathGenerator[k].path.NumberOfSegments];
-            for (int i = 0; i < pathGenerator[k].path.NumberOfSegments; i++)
+            pathGenerators[k].trackSegments = new TrackSegment[pathGenerators[k].path.NumberOfSegments];
+            for (int i = 0; i < pathGenerators[k].path.NumberOfSegments; i++)
             {
                 GameObject segment = new GameObject("segment");
                 segment.transform.SetParent(track.transform);
 
-                segment.transform.position = pathGenerator[k].path.GetPointsInSegment(i)[0];
-                var pointData = pathGenerator[k].path.CalculateEvenlySpacedSegmentPoints(i, 0.1f);
+                segment.transform.position = pathGenerators[k].path.GetPointsInSegment(i)[0];
+                var pointData = pathGenerators[k].path.CalculateEvenlySpacedSegmentPoints(i, 0.1f);
 
                 var points = pointData.points;
 
                 TrackSegment trackSegment = segment.AddComponent<TrackSegment>();
                 segments.Add(trackSegment);
                 trackSegment.generator = k;
-                pathGenerator[k].trackSegments[i] = trackSegment;
+                pathGenerators[k].trackSegments[i] = trackSegment;
                 trackSegment.points = new TrackSegment.TrackPoint[points.Length];
                 MeshFilter meshFilter = segment.AddComponent<MeshFilter>();
                 Mesh mesh = new Mesh();
@@ -116,7 +121,7 @@ public class TrackManager : MonoBehaviour
                         totalLength += trackSegment.points[j].nextDist;
                     }
 
-                    var a = pathGenerator[k].path.GetPointsInSegment(i);
+                    var a = pathGenerators[k].path.GetPointsInSegment(i);
                     trackSegment.points[j].tangent = Bezier.GetTanget(a[0], a[1], a[2], a[3], pointData.t[j]);
 
                     if (j != 0)
@@ -158,57 +163,57 @@ public class TrackManager : MonoBehaviour
 
     private void UpdateTrackConnectivity()
     {
-        for (int k = 0; k < pathGenerator.Length; k++)
+        for (int k = 0; k < pathGenerators.Length; k++)
         {
             //connect start to end if closed loop
-			if (pathGenerator[k].path.IsClosed)
+			if (pathGenerators[k].path.IsClosed)
 			{
-                var start = pathGenerator[k].trackSegments[0];
-                var end = pathGenerator[k].trackSegments.Last();
+                var start = pathGenerators[k].trackSegments[0];
+                var end = pathGenerators[k].trackSegments.Last();
 
                 start.ConnectPrev(end);
                 end.ConnectNext(start);
             }
             //connect to other path
-            if (pathGenerator[k].ConnectStartToPath.connector != null)
+            if (pathGenerators[k].ConnectStartToPath.connector != null)
             {
-                TrackSegment trackSegment = pathGenerator[k].trackSegments[0];
-                if (pathGenerator[k].ConnectStartToPath.connectToEnd)
+                TrackSegment trackSegment = pathGenerators[k].trackSegments[0];
+                if (pathGenerators[k].ConnectStartToPath.connectToEnd)
                 {
-                    TrackSegment connector = pathGenerator[k].ConnectStartToPath.connector.GetClosestSegmentEnd(trackSegment.transform.position);
+                    TrackSegment connector = pathGenerators[k].ConnectStartToPath.connector.GetClosestSegmentEnd(trackSegment.transform.position);
                     trackSegment.ConnectPrev(connector);
                     connector.ConnectNext(trackSegment);
                 }
-                else if (pathGenerator[k].ConnectStartToPath.connectToStart)
+                else if (pathGenerators[k].ConnectStartToPath.connectToStart)
                 {
-                    TrackSegment connector = pathGenerator[k].ConnectStartToPath.connector.GetClosestSegmentStart(trackSegment.transform.position);
+                    TrackSegment connector = pathGenerators[k].ConnectStartToPath.connector.GetClosestSegmentStart(trackSegment.transform.position);
                     trackSegment.ConnectPrev(connector);
                     connector.ConnectPrev(trackSegment);
                 }
             }
             //connect to other path
-            if (pathGenerator[k].ConnectEndToPath.connector != null)
+            if (pathGenerators[k].ConnectEndToPath.connector != null)
             {
-                TrackSegment trackSegment = pathGenerator[k].trackSegments.Last();
-                if (pathGenerator[k].ConnectEndToPath.connectToStart)
+                TrackSegment trackSegment = pathGenerators[k].trackSegments.Last();
+                if (pathGenerators[k].ConnectEndToPath.connectToStart)
                 {
-                    TrackSegment connector = pathGenerator[k].ConnectEndToPath.connector.GetClosestSegmentStart(trackSegment.points[trackSegment.points.Length - 1].position);
+                    TrackSegment connector = pathGenerators[k].ConnectEndToPath.connector.GetClosestSegmentStart(trackSegment.points[trackSegment.points.Length - 1].position);
                     trackSegment.ConnectNext(connector);
                     connector.ConnectPrev(trackSegment);
                 }
-                else if (pathGenerator[k].ConnectEndToPath.connectToEnd)
+                else if (pathGenerators[k].ConnectEndToPath.connectToEnd)
                 {
-                    TrackSegment connector = pathGenerator[k].ConnectEndToPath.connector.GetClosestSegmentEnd(trackSegment.points[trackSegment.points.Length - 1].position);
+                    TrackSegment connector = pathGenerators[k].ConnectEndToPath.connector.GetClosestSegmentEnd(trackSegment.points[trackSegment.points.Length - 1].position);
                     trackSegment.ConnectNext(connector);
                     connector.ConnectNext(trackSegment);
                 }
             }
 
             //connect segments in same path
-            for (int i = 0; i < pathGenerator[k].trackSegments.Length-1; i++)
+            for (int i = 0; i < pathGenerators[k].trackSegments.Length-1; i++)
 			{
-                var current = pathGenerator[k].trackSegments[i];
-                var next = pathGenerator[k].trackSegments[i + 1];
+                var current = pathGenerators[k].trackSegments[i];
+                var next = pathGenerators[k].trackSegments[i + 1];
                 current.ConnectNext(next);
                 next.ConnectPrev(current);
             }

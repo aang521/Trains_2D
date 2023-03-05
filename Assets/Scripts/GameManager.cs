@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
 
 	public bool playing = true;
 
+	public GameObject endScreen;
+
 	public float matchDuration;
 	[HideInInspector]
 	public float startTime;
@@ -36,8 +38,8 @@ public class GameManager : MonoBehaviour
 		float remainingTime = matchDuration - timePlaying;
 		if(remainingTime < 0)
 		{
-			//playing = false;
-			//SceneManager.LoadScene("EindScherm");
+			playing = false;
+			endScreen.SetActive(true);
 		}
 	}
 }
