@@ -195,7 +195,7 @@ public class Train
 		{
 			Wagon mainWagon = wagons[mainWagonIndex];
 
-			float distToTravel = speed * Time.deltaTime;
+			float distToTravel = speed * Time.fixedDeltaTime;
 
 			var currentSegment = TrackManager.instance.segments[mainWagon.currentSegment];
 			if (mainWagon.isInversedOnSegment)
@@ -276,6 +276,10 @@ public class Train
 				TrackSegment next = currentSegment.Prev.Find(x => x == otherSegment);
 				if (next == null)
 					next = currentSegment.Prev.Find(x => x.Next.Any(y => y == otherSegment) || x.Prev.Any(y => y == otherSegment));
+				if (next == null)
+					next = currentSegment.Next.Find(x => x == otherSegment);
+				if (next == null)
+					next = currentSegment.Next.Find(x => x.Next.Any(y => y == otherSegment) || x.Prev.Any(y => y == otherSegment));
 				currentSegment = next;
 				if (currentSegment == null)
 				{
@@ -307,6 +311,10 @@ public class Train
 				TrackSegment next = currentSegment.Next.Find(x => x == otherSegment);
 				if (next == null)
 					next = currentSegment.Next.Find(x => x.Next.Any(y => y == otherSegment) || x.Prev.Any(y => y == otherSegment));
+				if (next == null)
+					next = currentSegment.Prev.Find(x => x == otherSegment);
+				if (next == null)
+					next = currentSegment.Prev.Find(x => x.Next.Any(y => y == otherSegment) || x.Prev.Any(y => y == otherSegment));
 				currentSegment = next;
 				if (currentSegment == null)
 				{
@@ -429,7 +437,12 @@ public class Train
 		wagon.currentSegment = TrackManager.instance.segments.IndexOf(nextSegment);
 	}
 
-	public void ResolveCollisions()
+	public struct SolvedCollision
+	{
+		public Train a, b;
+	}
+
+	public void ResolveCollisions(List<SolvedCollision> solvedCollisions)
 	{
 		//foreach(Wagon wagon in wagons)
 		for (int i = 0; i < wagons.Count; i++)
@@ -442,6 +455,7 @@ public class Train
 			foreach (Collider2D collider in results)
 			{
 				Wagon otherWagon = collider.GetComponent<Wagon>();
+				if (!otherWagon || otherWagon.train == wagon.train) continue;
 				//TODO check if collision is at one of the ends of the wagon and is on the same track
 				if(otherWagon && otherWagon.train.controller == -1)
 				{
@@ -454,6 +468,37 @@ public class Train
 					{
 						AddWagonFront(otherWagon);
 					}
+				}
+				else
+				{
+					if (solvedCollisions.Any(x => (x.a == wagon.train && x.b == otherWagon.train) || (x.a == otherWagon.train && x.b == wagon.train)))
+						continue;
+
+					Vector2 velocity1 = wagon.train.speed * wagon.transform.right;
+					Vector2 velocity2 = otherWagon.train.speed * otherWagon.transform.right;
+					Vector2 relativeVelocity = velocity1 - velocity2;
+
+					float tmpSpeed1 = wagon.train.speed;
+					float tmpSpeed2 = otherWagon.train.speed;
+
+					wagon.train.speed *= -1;
+					otherWagon.train.speed *= -1;
+
+					otherWagon.train.UpdatePositions();
+					wagon.train.UpdatePositions();
+
+					wagon.train.speed = tmpSpeed1;
+					otherWagon.train.speed = tmpSpeed2;
+
+					otherWagon.train.speed += Vector2.Dot(otherWagon.transform.right, (relativeVelocity * wagon.train.totalMass / otherWagon.train.totalMass));
+					wagon.train.speed -= Vector2.Dot(wagon.transform.right, (relativeVelocity * otherWagon.train.totalMass / wagon.train.totalMass));
+
+					otherWagon.train.UpdatePositions();
+					otherWagon.train.UpdatePositions();
+					wagon.train.UpdatePositions();
+					wagon.train.UpdatePositions();
+
+					solvedCollisions.Add(new SolvedCollision { a=wagon.train, b=otherWagon.train });
 				}
 			}
 		}

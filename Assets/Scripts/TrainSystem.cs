@@ -88,9 +88,10 @@ public class TrainSystem : MonoBehaviour
 			train.UpdatePositions();
 		}
 
+		List<Train.SolvedCollision> solvedCollisions = new List<Train.SolvedCollision>(4);
 		foreach (Train train in trains)
 		{
-			train.ResolveCollisions();
+			train.ResolveCollisions(solvedCollisions);
 		}
 
 		foreach (Train train in trains)

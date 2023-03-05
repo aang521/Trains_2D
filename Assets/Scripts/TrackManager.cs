@@ -80,6 +80,7 @@ public class TrackManager : MonoBehaviour
 		{
             DestroyImmediate(transform.GetChild(i).gameObject);
 		}
+        segments.Clear();
         GameObject track = new GameObject("Track");
         track.transform.parent = transform;
         for (int k = 0; k < pathGenerators.Length; k++)
