@@ -76,7 +76,7 @@ public class PathGenerator : MonoBehaviour
 
         for (int i = 0; i < trackSegments.Length; i++)
         {
-            float dist = Vector2.Distance(origin, path.GetPointsInSegment(i)[0]); //Searching for segment ends, so searching for point 0 in segment
+            float dist = Vector2.Distance(origin, trackSegments[i].points[0].position); //Searching for segment ends, so searching for point 0 in segment
             if (newSelectedSegment == null)
             {
                 minDistToSegment = dist;

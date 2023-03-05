@@ -23,6 +23,7 @@ public class Wagon : MonoBehaviour
 	public Vector2 cargoDropThreshold;
 
 	public int currentSegment;
+	public TrackSegment trackSegment;
 	public float distanceAlongSegment;
 	public bool isInversedOnSegment;
 
@@ -58,6 +59,10 @@ public class Wagon : MonoBehaviour
 
 	public void Update()
 	{
+		if(currentSegment != -1)
+		{
+			trackSegment = TrackManager.instance.segments[currentSegment];
+		}
 		if (cargo)
 		{
 			cargo.transform.position = cargoPosition;

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class TrackManager : MonoBehaviour
@@ -9,9 +10,6 @@ public class TrackManager : MonoBehaviour
     public PathGenerator[] pathGenerator;
 
     public List<TrackSegment> segments = new List<TrackSegment>();
-
-    public TrackSegment Prev;
-    public TrackSegment First;
 
     public float trackHalfWidth = 1;
     public Material trackMaterial;
@@ -25,6 +23,59 @@ public class TrackManager : MonoBehaviour
 
     public void SetupLevel()
     {
+        for (int k = 0; k < pathGenerator.Length; k++)
+        {
+            if (!pathGenerator[k].path.IsClosed)
+            {
+                if (pathGenerator[k].ConnectEndToPath.connector != null)
+                {
+                    float smallestDist = float.MaxValue;
+                    Vector2 newPos = Vector2.zero;
+                    for (int i = 0; i < pathGenerator[k].ConnectEndToPath.connector.path.NumberOfSegments; i++)
+                    {
+                        var points = pathGenerator[k].ConnectEndToPath.connector.path.GetPointsInSegment(i);
+                        float dist = (points[0] - pathGenerator[k].path.GetPointsInSegment(pathGenerator[k].path.NumberOfSegments - 1)[3]).sqrMagnitude;
+                        float dist2 = (points[3] - pathGenerator[k].path.GetPointsInSegment(pathGenerator[k].path.NumberOfSegments - 1)[3]).sqrMagnitude;
+
+                        if (dist < smallestDist)
+                        {
+                            smallestDist = dist;
+                            newPos = points[0];
+                        }
+                        if (dist2 < smallestDist)
+                        {
+                            smallestDist = dist2;
+                            newPos = points[3];
+                        }
+                    }
+                    pathGenerator[k].path.MovePoint((pathGenerator[k].path.NumberOfSegments - 1)*3 + 3, newPos);
+                }
+                if (pathGenerator[k].ConnectStartToPath.connector != null)
+                {
+                    float smallestDist = float.MaxValue;
+                    Vector2 newPos = Vector2.zero;
+                    for (int i = 0; i < pathGenerator[k].ConnectStartToPath.connector.path.NumberOfSegments; i++)
+                    {
+                        var points = pathGenerator[k].ConnectStartToPath.connector.path.GetPointsInSegment(i);
+                        float dist = (points[0] - pathGenerator[k].path.GetPointsInSegment(0)[0]).sqrMagnitude;
+                        float dist2 = (points[3] - pathGenerator[k].path.GetPointsInSegment(0)[0]).sqrMagnitude;
+
+                        if (dist < smallestDist)
+                        {
+                            smallestDist = dist;
+                            newPos = points[0];
+                        }
+                        if (dist2 < smallestDist)
+                        {
+                            smallestDist = dist2;
+                            newPos = points[3];
+                        }
+                    }
+                    pathGenerator[k].path.MovePoint(0, newPos);
+                }
+            }
+        }
+
         GameObject track = new GameObject("Track");
         for (int k = 0; k < pathGenerator.Length; k++)
         {
@@ -109,82 +160,58 @@ public class TrackManager : MonoBehaviour
     {
         for (int k = 0; k < pathGenerator.Length; k++)
         {
-            for (int i = 0; i < pathGenerator[k].trackSegments.Length; i++)
-            {
-                //Connecting tracksegments to each other
-                TrackSegment trackSegment = pathGenerator[k].trackSegments[i];
+            //connect start to end if closed loop
+			if (pathGenerator[k].path.IsClosed)
+			{
+                var start = pathGenerator[k].trackSegments[0];
+                var end = pathGenerator[k].trackSegments.Last();
 
-                //Open path
-                if (!pathGenerator[k].path.IsClosed)
-                {
-                    //connecting the starting segment to an existing segment of another generator
-                    if (i == 0)
-                    {
-                        First = trackSegment;
-                        if (pathGenerator[k].ConnectStartToPath.connector != null)
-                        {
-                            if (pathGenerator[k].ConnectStartToPath.connectToEnd)
-                            {
-                                TrackSegment connector = pathGenerator[k].ConnectStartToPath.connector.GetClosestSegmentEnd(trackSegment.transform.position);
-                                trackSegment.ConnectPrev(connector);
-                                connector.ConnectNext(trackSegment);
-                            }
-                            else if (pathGenerator[k].ConnectStartToPath.connectToStart)
-                            {
-                                TrackSegment connector = pathGenerator[k].ConnectStartToPath.connector.GetClosestSegmentStart(trackSegment.transform.position);
-                                trackSegment.ConnectPrev(connector);
-                                connector.ConnectPrev(trackSegment);
-                            }
-                        }
-                    }
-                    //Connection for the last segment of a track
-                    else if (i >= pathGenerator[k].trackSegments.Length - 1 && pathGenerator[k].ConnectEndToPath.connector != null)
-                    {
-                        if (pathGenerator[k].ConnectEndToPath.connectToStart)
-                        {
-                            //connecting the ending segment to an existing segment of another generator
-                            TrackSegment connector = pathGenerator[k].ConnectEndToPath.connector.GetClosestSegmentStart(trackSegment.points[trackSegment.points.Length - 1].position);
-                            trackSegment.ConnectNext(connector);
-                            connector.ConnectPrev(trackSegment);
-                        }
-                        else if (pathGenerator[k].ConnectEndToPath.connectToEnd)
-                        {
-                            TrackSegment connector = pathGenerator[k].ConnectEndToPath.connector.GetClosestSegmentEnd(trackSegment.points[trackSegment.points.Length - 1].position);
-                            trackSegment.ConnectNext(connector);
-                            connector.ConnectNext(trackSegment);
-                        }
-                    }
-
-                    if (Prev != null)
-                    {
-                        trackSegment.ConnectPrev(Prev);
-                        Prev.ConnectNext(trackSegment);
-                    }
-                }
-                //Closed path
-                else
-                {
-                    if (i == 0)
-                        First = trackSegment;
-                    //Connection for the last segment of a track
-                    else if (i >= pathGenerator[k].trackSegments.Length - 1)
-                    {
-                        //connecting the ending segment to an existing segment of another generator
-                        trackSegment.ConnectNext(First);
-                        First.ConnectPrev(trackSegment);
-                    }
-
-                    if (Prev != null)
-                    {
-                        trackSegment.ConnectPrev(Prev);
-                        Prev.ConnectNext(trackSegment);
-                    }
-                }
-
-                Prev = trackSegment;
+                start.ConnectPrev(end);
+                end.ConnectNext(start);
             }
-            First = null;
-            Prev = null;
+            //connect to other path
+            if (pathGenerator[k].ConnectStartToPath.connector != null)
+            {
+                TrackSegment trackSegment = pathGenerator[k].trackSegments[0];
+                if (pathGenerator[k].ConnectStartToPath.connectToEnd)
+                {
+                    TrackSegment connector = pathGenerator[k].ConnectStartToPath.connector.GetClosestSegmentEnd(trackSegment.transform.position);
+                    trackSegment.ConnectPrev(connector);
+                    connector.ConnectNext(trackSegment);
+                }
+                else if (pathGenerator[k].ConnectStartToPath.connectToStart)
+                {
+                    TrackSegment connector = pathGenerator[k].ConnectStartToPath.connector.GetClosestSegmentStart(trackSegment.transform.position);
+                    trackSegment.ConnectPrev(connector);
+                    connector.ConnectPrev(trackSegment);
+                }
+            }
+            //connect to other path
+            if (pathGenerator[k].ConnectEndToPath.connector != null)
+            {
+                TrackSegment trackSegment = pathGenerator[k].trackSegments.Last();
+                if (pathGenerator[k].ConnectEndToPath.connectToStart)
+                {
+                    TrackSegment connector = pathGenerator[k].ConnectEndToPath.connector.GetClosestSegmentStart(trackSegment.points[trackSegment.points.Length - 1].position);
+                    trackSegment.ConnectNext(connector);
+                    connector.ConnectPrev(trackSegment);
+                }
+                else if (pathGenerator[k].ConnectEndToPath.connectToEnd)
+                {
+                    TrackSegment connector = pathGenerator[k].ConnectEndToPath.connector.GetClosestSegmentEnd(trackSegment.points[trackSegment.points.Length - 1].position);
+                    trackSegment.ConnectNext(connector);
+                    connector.ConnectNext(trackSegment);
+                }
+            }
+
+            //connect segments in same path
+            for (int i = 0; i < pathGenerator[k].trackSegments.Length-1; i++)
+			{
+                var current = pathGenerator[k].trackSegments[i];
+                var next = pathGenerator[k].trackSegments[i + 1];
+                current.ConnectNext(next);
+                next.ConnectPrev(current);
+            }
         }
     }
 }

@@ -36,8 +36,8 @@ public class GameManager : MonoBehaviour
 		float remainingTime = matchDuration - timePlaying;
 		if(remainingTime < 0)
 		{
-			playing = false;
-			SceneManager.LoadScene("EindScherm");
+			//playing = false;
+			//SceneManager.LoadScene("EindScherm");
 		}
 	}
 }
