@@ -72,6 +72,28 @@ public class TrainSystem : MonoBehaviour
 	{
 		for(int i = 0; i < trains.Count; i++)
 			trains[i].UpdateInput();
+
+		void DisableController(int controller)
+		{
+			for (int i = 0; i < trains.Count; i++)
+			{
+				if (trains[i].controller == controller)
+				{
+					foreach (Wagon wagon in trains[i].wagons)
+						Destroy(wagon.gameObject);
+					trains.RemoveAt(i);
+					i--;
+				}
+			}
+		}
+		if (Input.GetKeyDown("1"))
+			DisableController(0);
+		if (Input.GetKeyDown("2"))
+			DisableController(1);
+		if (Input.GetKeyDown("3"))
+			DisableController(2);
+		if (Input.GetKeyDown("4"))
+			DisableController(3);
 	}
 
 	public void FixedUpdate()
