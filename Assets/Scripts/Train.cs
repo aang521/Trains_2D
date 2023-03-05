@@ -108,6 +108,8 @@ public class Train
 			TrackSegment.TrackPoint current = currentSegment.points.Last();
 			Vector2 currentEnd = current.position;
 			Vector2 currentNormal = new Vector2(-current.tangent.y, current.tangent.x);
+			if (wagon.isInversedOnSegment)
+				currentNormal *= -1;
 			float bestValue = float.MaxValue;
 			TrackSegment bestNextSegment = null;
 			bool bestShouldInvertDirection = false;
@@ -145,6 +147,8 @@ public class Train
 			TrackSegment.TrackPoint current = TrackManager.instance.segments[wagon.currentSegment].points[0];
 			Vector2 currentEnd = current.position;
 			Vector2 currentNormal = new Vector2(-current.tangent.y, current.tangent.x);
+			if (wagon.isInversedOnSegment)
+				currentNormal *= -1;
 			float bestValue = float.MaxValue;
 			TrackSegment bestNextSegment = null;
 			bool bestShouldInvertDirection = false;
@@ -256,12 +260,76 @@ public class Train
 
 		void UpdateWagonPosition(Wagon wagon, int wagonIndex, Wagon otherWagon, bool behind)
 		{
+			
+
 			if (speed == 0)
 				return;
 			Vector2 otherAnchorPos = (Vector2)otherWagon.transform.position + (Vector2)otherWagon.transform.right * trainSettings.trainAnchorOffset * (behind ? -1 : 1);
 
 			var currentSegment = TrackManager.instance.segments[wagon.currentSegment];
 			int currentPointIndex = 0;
+
+			void GetPrevTrack()
+			{
+				Vector2 currentEnd = TrackManager.instance.segments[wagon.currentSegment].points[0].position;
+				TrackSegment otherSegment = TrackManager.instance.segments[otherWagon.currentSegment];
+				TrackSegment next = currentSegment.Prev.Find(x => x == otherSegment);
+				if (next == null)
+					next = currentSegment.Prev.Find(x => x.Next.Any(y => y == otherSegment) || x.Prev.Any(y => y == otherSegment));
+				currentSegment = next;
+				if (currentSegment == null)
+				{
+					Debug.DebugBreak();
+					Debug.LogError("Could not find next track");
+				}
+				currentSegment = next;
+
+				wagon.currentSegment = TrackManager.instance.segments.IndexOf(currentSegment);
+
+				Vector2 endA = TrackManager.instance.segments[wagon.currentSegment].points[0].position;
+				Vector2 endB = TrackManager.instance.segments[wagon.currentSegment].points.Last().position;
+
+				float distA = Vector2.Distance(currentEnd, endA);
+				float distB = Vector2.Distance(currentEnd, endB);
+
+				bool start = distA < distB;
+
+				if (distA < distB)
+					wagon.isInversedOnSegment = !wagon.isInversedOnSegment;
+
+				currentPointIndex = start ? 0 : currentSegment.points.Length - 1;
+			}
+
+			void GetNextTrack()
+			{
+				Vector2 currentEnd = TrackManager.instance.segments[wagon.currentSegment].points.Last().position;
+				TrackSegment otherSegment = TrackManager.instance.segments[otherWagon.currentSegment];
+				TrackSegment next = currentSegment.Next.Find(x => x == otherSegment);
+				if (next == null)
+					next = currentSegment.Next.Find(x => x.Next.Any(y => y == otherSegment) || x.Prev.Any(y => y == otherSegment));
+				currentSegment = next;
+				if (currentSegment == null)
+				{
+					Debug.DebugBreak();
+					Debug.LogError("Could not find next track");
+				}
+				wagon.currentSegment = TrackManager.instance.segments.IndexOf(currentSegment);
+
+				wagon.currentSegment = TrackManager.instance.segments.IndexOf(currentSegment);
+
+				Vector2 endA = TrackManager.instance.segments[wagon.currentSegment].points[0].position;
+				Vector2 endB = TrackManager.instance.segments[wagon.currentSegment].points.Last().position;
+
+				float distA = Vector2.Distance(currentEnd, endA);
+				float distB = Vector2.Distance(currentEnd, endB);
+
+				bool start = distA < distB;
+
+				if (distA > distB)
+					wagon.isInversedOnSegment = !wagon.isInversedOnSegment;
+
+				currentPointIndex = start ? 0 : currentSegment.points.Length - 1;
+			}
 
 			float remaining = wagon.distanceAlongSegment;
 			while(remaining > 0 && currentPointIndex < currentSegment.points.Length-1)
@@ -276,17 +344,11 @@ public class Train
 				currentPointIndex++;
 			if (currentPointIndex < 0)
 			{
-				GetNextTrack(wagon, -1);
-				currentSegment = TrackManager.instance.segments[wagon.currentSegment];
-
-				currentPointIndex = !wagon.isInversedOnSegment ? currentSegment.points.Length - 1 : 0;
+				GetPrevTrack();
 			}
 			if (currentPointIndex >= currentSegment.points.Length)
 			{
-				GetNextTrack(wagon, 1);
-				currentSegment = TrackManager.instance.segments[wagon.currentSegment];
-
-				currentPointIndex = !wagon.isInversedOnSegment ? 0 : currentSegment.points.Length - 1;
+				GetNextTrack();
 			}
 
 			bool dragged = (behind && speed >= 0) || (!behind && speed < 0);
@@ -309,65 +371,13 @@ public class Train
 
 				if(currentPointIndex < 0)
 				{
-					Vector2 currentEnd = TrackManager.instance.segments[wagon.currentSegment].points[0].position;
-					TrackSegment otherSegment = TrackManager.instance.segments[otherWagon.currentSegment];
-					TrackSegment next = currentSegment.Prev.Find(x => x == otherSegment);
-					if (next == null)
-						next = currentSegment.Prev.Find(x => x.Next.Any(y => y == otherSegment) || x.Prev.Any(y => y == otherSegment));
-					currentSegment = next;
-					if (currentSegment == null)
-					{
-						Debug.DebugBreak();
-						Debug.LogError("Could not find next track");
-					}
-					currentSegment = next;
-
-					wagon.currentSegment = TrackManager.instance.segments.IndexOf(currentSegment);
-
-					Vector2 endA = TrackManager.instance.segments[wagon.currentSegment].points[0].position;
-					Vector2 endB = TrackManager.instance.segments[wagon.currentSegment].points.Last().position;
-
-					float distA = Vector2.Distance(currentEnd, endA);
-					float distB = Vector2.Distance(currentEnd, endB);
-
-					bool start = distA < distB;
-
-					if (distA < distB)
-						wagon.isInversedOnSegment = !wagon.isInversedOnSegment;
-
-					currentPointIndex = start ? 0 : currentSegment.points.Length-1;
+					GetPrevTrack();
 
 					bestDist = float.MaxValue;
 				}
 				if(currentPointIndex >= currentSegment.points.Length)
 				{
-					Vector2 currentEnd = TrackManager.instance.segments[wagon.currentSegment].points.Last().position;
-					TrackSegment otherSegment = TrackManager.instance.segments[otherWagon.currentSegment];
-					TrackSegment next = currentSegment.Next.Find(x => x == otherSegment);
-					if(next == null)
-						next = currentSegment.Next.Find(x => x.Next.Any(y => y == otherSegment) || x.Prev.Any(y => y == otherSegment));
-					currentSegment = next;
-					if (currentSegment == null)
-					{
-						Debug.DebugBreak();
-						Debug.LogError("Could not find next track");
-					}
-					wagon.currentSegment = TrackManager.instance.segments.IndexOf(currentSegment);
-
-					wagon.currentSegment = TrackManager.instance.segments.IndexOf(currentSegment);
-
-					Vector2 endA = TrackManager.instance.segments[wagon.currentSegment].points[0].position;
-					Vector2 endB = TrackManager.instance.segments[wagon.currentSegment].points.Last().position;
-
-					float distA = Vector2.Distance(currentEnd, endA);
-					float distB = Vector2.Distance(currentEnd, endB);
-
-					bool start = distA < distB;
-
-					if (distA > distB)
-						wagon.isInversedOnSegment = !wagon.isInversedOnSegment;
-
-					currentPointIndex = start ? 0 : currentSegment.points.Length - 1;
+					GetNextTrack();
 
 					bestDist = float.MaxValue;
 				}
